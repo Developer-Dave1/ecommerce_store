@@ -17,7 +17,7 @@ afterAll(async () => {
 
 test('addProduct inserts product into DB', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
-  const product = await Product.addProduct('sweater', 19.99, 10, true, client);
+  const product = await Product.addProduct('sweater', 19.99, 10, client);
 
   //confirm it's in the DB
   const res = await client.query('SELECT * FROM products WHERE product_name = $1', ['sweater']);
@@ -32,7 +32,7 @@ test('addProduct inserts product into DB', async () => {
 
 test('delete product from DB', async () => {
   // add product instance and to database
-  const product = await Product.addProduct('baseball hat', 11.99, 7, true, client);
+  const product = await Product.addProduct('baseball hat', 11.99, 7, client);
 
   // confirm it's in the DB
   const res = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -51,8 +51,8 @@ test('display quanity of product in stock', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
-  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, client);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -74,8 +74,8 @@ test('confirm product is in stock', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
-  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, client);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -84,8 +84,8 @@ test('confirm product is in stock', async () => {
   expect(res2.rows[0].product_name).toBe('jersey');
 
   // confirm product is in stock
-  let output1 = await Product.inStock(client, 'jersey');
-  let output2 = await Product.inStock(client, 'baseball hat');
+  let output1 = await Product.isInStock(client, 'jersey');
+  let output2 = await Product.isInStock(client, 'baseball hat');
   expect(output1).toBe(true);
   expect(output2).toBe(true);
 });
@@ -96,8 +96,8 @@ test('change product quantity', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
-  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, client);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -118,8 +118,8 @@ test('confirm product price is updated', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
-  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, client);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -139,8 +139,8 @@ test('change product name', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
-  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, client);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
