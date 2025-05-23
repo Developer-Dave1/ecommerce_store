@@ -46,11 +46,11 @@ test('delete product from DB', async () => {
 
 
 
-test('display all product names from DB in an array', async () => {
+test('display how many products of a kind are in stock', async () => {
   // clear database
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
-  // add products instances and add products to database
+  // add products to database
   const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
   const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
 
@@ -60,11 +60,11 @@ test('display all product names from DB in an array', async () => {
   const res2 = await client.query('SELECT * FROM products WHERE product_name = $1', ['jersey']);
   expect(res2.rows[0].product_name).toBe('jersey');
 
-  // output products
-  let output = await Product.createProductNameArray(client);
-  expect(output).toEqual(['baseball hat', 'jersey']);
+  // confirm quantity of product
+  let output1 = await Product.amountInStock(client, 'jersey');
+  let output2 = await Product.amountInStock(client, 'baseball hat');
+  expect(output1).toEqual(5);
+  expect(output2).toBe(7);
 });
-
-
 
 
