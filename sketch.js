@@ -15,7 +15,6 @@ APP FUCTIONALITY
 - check-out item (remove item from inventory)
 - user login (to add items to cart and check-out, and/or save items for later)
 - admin login (used to update, modify items, add items)
-- display image of item
 - display table of inventory
 
 BASIC DESIGN PRINCIPLES
