@@ -46,7 +46,7 @@ test('delete product from DB', async () => {
 
 
 
-test('display how many products of a kind are in stock', async () => {
+test('display quanity of product in stock', async () => {
   // clear database
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
@@ -91,6 +91,27 @@ test('confirm product is in stock', async () => {
 });
 
 
+test('change product quantity', async () => {
+  // clear database
+  await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
+
+  // add products to database
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+
+  // confirm it's in the DB
+  const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
+  expect(res1.rows[0].product_name).toBe('baseball hat');
+  const res2 = await client.query('SELECT * FROM products WHERE product_name = $1', ['jersey']);
+  expect(res2.rows[0].product_name).toBe('jersey');
+
+  // confirm quantity of product
+  let output1 = await Product.changeQuantity(client, 'baseball hat', 20);
+  const res3 = await client.query('SELECT quantity FROM products WHERE product_name = $1', ['baseball hat']);
+  expect(res3.rows[0].quantity).toBe(20);
+
+});
+
 
 test('confirm product price is updated', async () => {
   // clear database
@@ -112,5 +133,9 @@ test('confirm product price is updated', async () => {
   expect(res3.rows[0].price).toBe('25.99');
 
 });
+
+
+
+
 
 
