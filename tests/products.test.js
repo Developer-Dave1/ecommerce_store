@@ -63,8 +63,31 @@ test('display how many products of a kind are in stock', async () => {
   // confirm quantity of product
   let output1 = await Product.amountInStock(client, 'jersey');
   let output2 = await Product.amountInStock(client, 'baseball hat');
-  expect(output1).toEqual(5);
+  expect(output1).toBe(5);
   expect(output2).toBe(7);
+});
+
+
+
+test('confirm product is in stock', async () => {
+  // clear database
+  await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
+
+  // add products to database
+  const product1 = await Product.addProduct('baseball hat', 11.99, 7, true, client);
+  const product2 = await Product.addProduct('jersey', 80.99, 5, true, client);
+
+  // confirm it's in the DB
+  const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
+  expect(res1.rows[0].product_name).toBe('baseball hat');
+  const res2 = await client.query('SELECT * FROM products WHERE product_name = $1', ['jersey']);
+  expect(res2.rows[0].product_name).toBe('jersey');
+
+  // confirm quantity of product
+  let output1 = await Product.inStock(client, 'jersey');
+  let output2 = await Product.inStock(client, 'baseball hat');
+  expect(output1).toBe(true);
+  expect(output2).toBe(true);
 });
 
 
