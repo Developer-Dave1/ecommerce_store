@@ -28,7 +28,7 @@ test('add product to cart', async () => {
   await User.addUser(client, 'username', 'password');
 
   // Add to cart (user_id = 1, product_id = 1, client)
-  await User.addProductToCart(client, 1, 1);
+  await User.addProductToCart(client, 1, 1, 5);
 
   // Check cart
   const res = await client.query('SELECT * FROM cart');
