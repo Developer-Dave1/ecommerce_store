@@ -54,3 +54,4 @@ test('delete product from cart', async () => {
   expect(res.rows.length).toBe(0);
 
 });
+

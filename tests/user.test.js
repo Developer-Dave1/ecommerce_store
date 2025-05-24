@@ -1,5 +1,6 @@
 const { Client } = require('pg');
 const User = require('../lib/user.js');
+const Product = require('../lib/products.js');
 
 
 let client;
@@ -26,4 +27,17 @@ test('add user to db', async () => {
  // Check to see if user is in db
  let res = await client.query('SELECT * FROM users WHERE id = 1');
   expect(res.rows[0].username).toBe('steve');
+});
+
+test('delete product from cart', async () => {
+  // Clear database
+  await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
+
+  // Add a user 
+  await User.addUser(client, 'username', 'password');
+
+  // Delete the user
+  await User.deleteUser(client, 'username');
+  const res = await client.query('SELECT * FROM users WHERE username = $1', ['username']);
+  expect(res.rows.length).toBe(0);
 });
