@@ -36,3 +36,21 @@ test('add product to cart', async () => {
   expect(res.rows[0].user_id).toBe(1);
 });
 
+test('delete product from cart', async () => {
+  // Clear database
+  await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
+
+  // Add a product (name, price, quantity, client)
+  await Product.addProduct(client, 'sweater', 19.99, 10);
+
+  // Add a user (username, password, client)
+  await User.addUser(client, 'username', 'password');
+
+  // Add to cart (user_id = 1, product_id = 1, client)
+  await User.deleteProductInCart(client, 1, 1);
+
+  // Check cart
+  const res = await client.query('SELECT * FROM cart');
+  expect(res.rows.length).toBe(0);
+
+});
