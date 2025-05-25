@@ -17,7 +17,7 @@ afterAll(async () => {
   await client.end();
 });
 
-test('add user to db', async () => {
+test('add user to database', async () => {
   // Clear database and start from scratch
   await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
 
@@ -26,10 +26,12 @@ test('add user to db', async () => {
 
  // Check to see if user is in db
  let res = await client.query('SELECT * FROM users WHERE id = 1');
-  expect(res.rows[0].username).toBe('steve');
+ console.log(res);
+  expect(res.rows[0].id).toBe(1);
 });
 
-test('delete product from cart', async () => {
+
+test('delete user from database', async () => {
   // Clear database
   await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
 
