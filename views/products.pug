@@ -1,0 +1,12 @@
+doctype html
+html
+  head
+    title Product List
+  body
+    h1 All Products
+    ul
+      if products.length
+        each product in products
+          li #{product.name} - $#{product.price} (#{product.quantity} in stock)
+      else
+        li No products available
