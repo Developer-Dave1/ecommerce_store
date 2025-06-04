@@ -1,19 +1,18 @@
 doctype html
 html
   head
-    title e-commerce Store
+    title Ecommerce Store
+    link(rel="stylesheet", href="stylesheets/styles.css")
   body
-    h1 Submit Your Info
+    header
+      h1 My Store
+      nav
+        a(href="/") Home
+        |   |  
+        a(href="/products") Products
 
-    form(action="/submit" method="POST")
-      label(for="username") Username:
-      input(type="text" name="username" id="username")
+    main
+      block content
 
-      br
-
-      label(for="email") Email:
-      input(type="email" name="email" id="email")
-
-      br
-
-      button(type="submit") Submit
+    footer
+      p &copy; #{new Date().getFullYear()} My Store
