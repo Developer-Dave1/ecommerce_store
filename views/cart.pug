@@ -1,0 +1,30 @@
+extends layout.pug
+
+block content
+  h2 Your Cart
+
+  if !cartItems || cartItems.length === 0
+    p Your cart is empty.
+  else
+    table.cart-table
+      thead
+        tr
+          th Product
+          th Price
+          th Quantity
+          th Total
+      tbody
+        each item in cartItems
+          tr
+            td= item.product_name
+            td $#{item.price}
+            td= item.quantity
+            td $#{item.total}
+
+    h3 Total: 11.99 (hard-coded)
+
+
+
+
+
+    a.button(href="/products") ← Continue Shopping

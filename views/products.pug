@@ -1,7 +1,7 @@
 extends layout.pug
 
 block content
-  h2 Our Products
+  h2 All Products
 
   if !products || products.length === 0
     p No products available right now.
@@ -9,6 +9,7 @@ block content
     .product-grid
       each product in products
         .product-card
+          p ID: #{product.id} 
           h3= product.name
           p $#{product.price.toFixed(2)}
           p= product.quantity + ' in stock'
@@ -16,3 +17,9 @@ block content
             span.in-stock In Stock
           else
             span.out-of-stock Out of Stock
+
+          form(action="/cart", method="GET")
+            input(type="hidden", name="product_id", value=product.id)
+            input(type="hidden", name="quantity", value=1)
+            button(type="submit").add-button Add to Cart
+

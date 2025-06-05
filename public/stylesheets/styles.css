@@ -108,3 +108,61 @@ footer {
 .button:hover {
   background-color: #0056b3;
 }
+
+.add-button {
+  margin-top: 0.75rem;
+  padding: 0.5rem 1rem;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.add-button:hover {
+  background-color: #218838;
+}
+
+.cart-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 1rem;
+}
+
+.cart-table th,
+.cart-table td {
+  padding: 0.75rem;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.cart-table th {
+  background-color: #f2f2f2;
+}
+
+.cart-total {
+  font-weight: bold;
+  font-size: 1.4rem;
+  margin-left: 0.5rem;
+}
+
+
+h3 {
+  margin-top: 1.5rem;
+}
+
+a.button {
+  display: inline-block;
+  margin-top: 1rem;
+  background-color: #007bff;
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 4px;
+  text-decoration: none;
+}
+
+a.button:hover {
+  background-color: #0056b3;
+}
