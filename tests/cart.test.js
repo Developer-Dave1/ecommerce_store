@@ -1,7 +1,7 @@
 const { Client } = require('pg');
 const Cart = require('../lib/cart.js');
 const Product = require('../lib/products.js');
-const User = require('../lib/users.js');
+const User = require('../lib/user.js');
 
 let client;
 
@@ -85,5 +85,6 @@ test('updateCartQuantity updates quantity of a cart item', async () => {
   const res = await client.query('SELECT quantity FROM cart WHERE user_id = $1 AND product_id = $2', [userId, productId]);
   expect(res.rows[0].quantity).toBe(5);
 });
+
 
 
