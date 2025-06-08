@@ -20,3 +20,5 @@ CREATE TABLE products (
     in_stock BOOLEAN DEFAULT TRUE
 );
 
+INSERT INTO products (product_name, price, quantity)
+  VALUES ('hat', 14.00, 5);
