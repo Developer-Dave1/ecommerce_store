@@ -19,7 +19,7 @@ afterAll(async () => {
 
 test('add user to database', async () => {
   // Clear database and start from scratch
-  await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
+  await client.query('TRUNCATE products, cart_products, users RESTART IDENTITY CASCADE');
 
   // Add user
   const user = await User.addUser(client, 'steve', 'stevespassword');
@@ -33,7 +33,7 @@ test('add user to database', async () => {
 
 test('delete user from database', async () => {
   // Clear database
-  await client.query('TRUNCATE products, cart, users RESTART IDENTITY CASCADE');
+  await client.query('TRUNCATE products, cart_products, users RESTART IDENTITY CASCADE');
 
   // Add a user 
   await User.addUser(client, 'username', 'password');

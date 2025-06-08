@@ -110,12 +110,14 @@ test('confirm products are in store', async () => {
   // Assert the structure
   expect(output).toEqual([
     {
+      id: 1,
       name: 'baseball hat',
       price: 11.99,
       quantity: 7,
       inStock: true,
     },
     {
+      id: 2,
       name: 'jersey',
       price: 80.99,
       quantity: 5,
