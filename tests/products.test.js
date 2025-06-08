@@ -16,7 +16,7 @@ afterAll(async () => {
 
 test('addProduct inserts product into DB', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
-  const product = await Product.addProduct(client, 'sweater', 19.99, 10);
+  const product = await Product.addProduct(client, 'sweater', 19.99, 10, true);
 
   const res = await client.query('SELECT * FROM products WHERE id = $1', [product.id]);
   expect(res.rows.length).toBe(1);
@@ -28,13 +28,13 @@ test('addProduct inserts product into DB', async () => {
 
 test('delete product from DB', async () => {
   // add product instance and to database
-  const product = await Product.addProduct(client, 'baseball hat', 11.99, 7);
+  const product = await Product.addProduct(client, 'baseball hat', 11.99, 7, true);
 
   // confirm it's in the DB
   const res = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
   expect(res.rows[0].product_name).toBe('baseball hat');
 
-  // confirm product deleted
+  // delete product from database
   await Product.deleteProduct(client, 'baseball hat');
   const resDelete = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
   expect(resDelete.rows.length).toBe(0);
@@ -44,8 +44,8 @@ test('display quantity of product in stock', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7);
-  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5);
+  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7, true);
+  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5, true);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -64,8 +64,8 @@ test('confirm product is in stock', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7);
-  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5);
+  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7, true);
+  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5, true);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);
@@ -124,8 +124,8 @@ test('change product name', async () => {
   await client.query('TRUNCATE products RESTART IDENTITY CASCADE');
 
   // add products to database
-  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7);
-  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5);
+  const product1 = await Product.addProduct(client, 'baseball hat', 11.99, 7, true);
+  const product2 = await Product.addProduct(client, 'jersey', 80.99, 5, true);
 
   // confirm it's in the DB
   const res1 = await client.query('SELECT * FROM products WHERE product_name = $1', ['baseball hat']);

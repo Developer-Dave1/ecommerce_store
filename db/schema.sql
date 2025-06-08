@@ -7,10 +7,11 @@ CREATE TABLE users (
 <<<<<<< HEAD
 =======
 CREATE TABLE cart (
-    user_id INTEGER NOT NULL REFERENCES users(id),
-    product_id INTEGER NOT NULL REFERENCES products(id),
-    quantity INTEGER NOT NULL,
-    PRIMARY KEY(user_id, product_id)
+  id SERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
+  quantity INTEGER NOT NULL DEFAULT 1 CHECK (quantity > 0),
+  UNIQUE (user_id, product_id)
 );
 
 >>>>>>> users
@@ -23,10 +24,5 @@ CREATE TABLE products (
 );
 <<<<<<< HEAD
 
-CREATE TABLE cart_products (
-    user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    product_id INTEGER NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-    quantity INTEGER DEFAULT 1 CHECK(quantity > 0)
-);
-=======
->>>>>>> users
+INSERT INTO products (product_name, price, quantity)
+  VALUES ('hat', 14.00, 5);

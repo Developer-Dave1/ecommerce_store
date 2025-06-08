@@ -2,6 +2,7 @@ const express = require('express');
 const app = express();
 const path = require('path');
 const Product = require('./lib/products.js');
+const Cart = require('./lib/cart.js'); 
 const { Client } = require('pg');
 
 const client = new Client({ database: 'ecommerce' });
@@ -33,6 +34,24 @@ app.get('/products', async (req, res) => {
     res.status(500).send('Error loading products');
   }
 });
+
+app.get('/cart', async (req, res) => {
+  try {
+    const user_id = 1; // or from session
+    const cartItems = await Cart.getCartContents(client, user_id);
+
+    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+    res.render('cart', {
+      cartItems,
+      total: totalCartAmount
+    });
+  } catch (error) {
+    console.error('Error loading cart:', error);
+    res.status(500).send('Error loading cart.');
+  }
+});
+
 
 app.use((req, res) => {
   res.status(404).render('not-found'); 
