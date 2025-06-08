@@ -18,7 +18,7 @@ block content
           else
             span.out-of-stock Out of Stock
 
-          form(action="/cart", method="GET")
+          form(action="/cart/add", method="POST")
             input(type="hidden", name="product_id", value=product.id)
             input(type="hidden", name="quantity", value=1)
             button(type="submit").add-button Add to Cart

@@ -39,12 +39,12 @@ app.get('/cart', async (req, res) => {
   try {
     const user_id = 1; // or from session
     const cartItems = await Cart.getCartContents(client, user_id);
+    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
 
     res.render('cart', {
       cartItems,
-      total: totalCartAmount
+      total: totalCartAmount.toFixed(2)
     });
   } catch (error) {
     console.error('Error loading cart:', error);
@@ -52,9 +52,28 @@ app.get('/cart', async (req, res) => {
   }
 });
 
+app.post('/cart/add', async (req, res) => {
+  try {
+    const user_id = 1; // eventually replace with session id
+    const productIdOfItem = parseInt(req.body.product_id, 10);
+
+    await Cart.addProductToCart(client, user_id, productIdOfItem, 1);
+    const cartItems = await Cart.getCartContents(client, user_id);
+
+    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
+
+    res.redirect('/cart');
+  
+  } catch (error) {
+    console.error('Error loading cart:', error.message, error.stack);
+    res.status(404).render('not-found');
+
+  }
+});
+
 
 app.use((req, res) => {
-  res.status(404).render('not-found'); 
+  res.status(404).render('not-found');
 });
 
 app.listen(3000, () => {
