@@ -1,0 +1,47 @@
+Last login: Mon Jun  9 08:15:14 on ttys002
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+Mac:~ daviddelaharpe$ cd /Users/daviddelaharpe/Desktop/LS_CORE/JS185/ecommerce
+Mac:ecommerce daviddelaharpe$ alias proj="cd /Users/daviddelaharpe/Desktop/LS_CORE/JS185/ecommerce"
+Mac:ecommerce daviddelaharpe$ nano ~/.zshrc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  UW PICO 5.09           File: /Users/daviddelaharpe/.zshrc           Modified  
+
+alias proj="cd /Users/daviddelaharpe/Desktop/LS_CORE/JS185/ecommerce"
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+^G Get Help  ^O WriteOut  ^R Read File ^Y Prev Pg   ^K Cut Text  ^C Cur Pos   
+^X Exit      ^J Justify   ^W Where is  ^V Next Pg   ^U UnCut Text^T To Spell  

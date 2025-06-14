@@ -9,12 +9,10 @@ block content
     .product-grid
       each product in products
         .product-card
-          p ID: #{product.id} 
           h3= product.name
           p $#{product.price.toFixed(2)}
-          p= product.quantity + ' in stock'
           if product.inStock
-            span.in-stock In Stock
+            span.in-stock In Stock (#{product.quantity} units)
           else
             span.out-of-stock Out of Stock
 

@@ -1,27 +1,11 @@
--- Create sample users
-INSERT INTO users (username, password)
-VALUES 
-  ('alice', 'hashedpassword1'),
-  ('bob', 'hashedpassword2');
-
--- Create sample carts (linked to users)
-INSERT INTO cart (user_id)
-VALUES 
-  (1), -- alice
-  (2); -- bob
-
--- Add some products
-INSERT INTO products (product_name, price, quantity, in_stock)
-VALUES 
-  ('T-Shirt', 19.99, 100, TRUE),
-  ('Sneakers', 59.95, 50, TRUE),
-  ('Backpack', 34.50, 25, TRUE),
-  ('Hat', 14.75, 0, FALSE);
-
--- Add products to carts
-INSERT INTO cart_products (cart_id, product_id, quantity)
-VALUES
-  (1, 1, 2),  -- Alice has 2 T-Shirts
-  (1, 3, 1),  -- Alice has 1 Backpack
-  (2, 2, 1),  -- Bob has 1 pair of Sneakers
-  (2, 4, 1);  -- Bob has 1 Hat (even though it's out of stock)
+INSERT INTO products (product_name, price, quantity, in_stock) VALUES
+    ('Classic Hoodie', 39.99, 25, TRUE),
+    ('Wireless Mouse', 24.99, 50, TRUE),
+    ('USB-C Charger 65W', 29.99, 40, TRUE),
+    ('Noise Cancelling Headphones', 89.95, 15, TRUE),
+    ('Stainless Steel Water Bottle', 19.99, 60, TRUE),
+    ('Laptop Backpack', 49.99, 20, TRUE),
+    ('Smart LED Bulb', 12.49, 0, FALSE),
+    ('Yoga Mat', 25.00, 30, TRUE),
+    ('Bluetooth Speaker', 34.99, 10, TRUE),
+    ('Portable SSD 1TB', 99.99, 0, FALSE);

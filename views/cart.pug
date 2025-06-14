@@ -12,13 +12,22 @@ block content
           th Product
           th Price
           th Quantity
+          th Remove
           
       tbody
         each item in cartItems
-          tr
-            td= item.product_name
-            td $#{item.price}
-            td= item.quantity
+         tr
+           td= item.product_name
+           td $#{item.price}
+           td= item.quantity
+           td
+             form(action="/cart/remove", method="POST")
+               input(type="hidden", name="product_id", value=item.product_id)
+               button(type="submit" class="remove-button") Remove
+
+            
+            
+            
 
     h3 Total: $#{total}
 

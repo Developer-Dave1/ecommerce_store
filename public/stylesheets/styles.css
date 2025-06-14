@@ -166,3 +166,20 @@ a.button {
 a.button:hover {
   background-color: #0056b3;
 }
+
+.remove-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #dc3545; /* Bootstrap red */
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+}

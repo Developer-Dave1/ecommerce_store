@@ -54,13 +54,40 @@ app.get('/cart', async (req, res) => {
 
 app.post('/cart/add', async (req, res) => {
   try {
+    const user_id = 1; 
+    const product_id = parseInt(req.body.product_id, 10);
+    const quantityToAdd = 1;
+
+    const currentAmount = await Product.amountInStock(client, product_id);
+
+    if (currentAmount < quantityToAdd) {
+      return res.status(400).send('Not enough stock available.');
+    }
+
+    await Cart.addProductToCart(client, user_id, product_id);
+
+    const newAmount = currentAmount - 1;
+    await Product.changeQuantity(client, product_id, newAmount);
+
+    res.redirect('/cart');
+
+  } catch (error) {
+    console.error('Error adding to cart:', error.message, error.stack);
+    res.status(500).render('not-found');
+  }
+});
+
+
+app.post('/cart/remove', async (req, res) => {
+  try {
+    const product_id = req.body.product_id;
+    console.log('product_id received:', product_id);  // should show something like '1'
+    
     const user_id = 1; // eventually replace with session id
-    const productIdOfItem = parseInt(req.body.product_id, 10);
 
-    await Cart.addProductToCart(client, user_id, productIdOfItem, 1);
-    const cartItems = await Cart.getCartContents(client, user_id);
+    console.log(`removing product: ${product_id}`)
 
-    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price, 0);
+    await Cart.deleteProductInCart(client, user_id, product_id);
 
     res.redirect('/cart');
   
@@ -70,6 +97,7 @@ app.post('/cart/add', async (req, res) => {
 
   }
 });
+
 
 
 app.use((req, res) => {
