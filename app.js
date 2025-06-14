@@ -88,6 +88,8 @@ app.post('/cart/remove', async (req, res) => {
     console.log(`removing product: ${product_id}`)
 
     await Cart.deleteProductInCart(client, user_id, product_id);
+    let currentQuantity = await Product.amountInStock(client, product_id);
+    await Product.changeQuantity(client, product_id, (currentQuantity + 1));
 
     res.redirect('/cart');
   
