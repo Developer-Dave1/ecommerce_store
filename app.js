@@ -117,6 +117,7 @@ app.post('/cart/add', async (req, res) => {
       req.session.cart.push({ product_id, quantity: quantityToAdd });
     }
 
+    await Product.changeQuantity(client, product_id, currentAmount - quantityToAdd);
     res.redirect('/cart');
     
   } catch (error) {
