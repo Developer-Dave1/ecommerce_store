@@ -129,22 +129,28 @@ app.post('/cart/add', async (req, res) => {
 
 app.post('/cart/remove', async (req, res) => {
   try {
-    const product_id = req.body.product_id;
-    console.log('product_id received:', product_id);  // should show something like '1'
+    const product_id = parseInt(req.body.product_id, 10);
     
-    const user_id = 1; // eventually replace with session id
+    if (!req.session.cart) {
+      return res.redirect('/cart')
+    }
 
-    console.log(`removing product: ${product_id}`)
+    const cart = req.session.cart;
+    
+    const index = cart.findIndex(item => item.product_id === product_id);
 
-    await Cart.deleteProductInCart(client, user_id, product_id);
-    let currentQuantity = await Product.amountInStock(client, product_id);
-    await Product.changeQuantity(client, product_id, (currentQuantity + 1));
+    if (index !== -1) {
+      const removedItem = cart.splice(index, 1)[0];
+
+      const currentQuantity = await Product.amountInStock(client, product_id);
+      await Product.changeQuantity(client, product_id, currentQuantity + removedItem.quantity);
+    }
 
     res.redirect('/cart');
   
   } catch (error) {
     console.error('Error loading cart:', error.message, error.stack);
-    res.status(404).render('not-found');
+    res.status(500).render('not-found');
 
   }
 });
