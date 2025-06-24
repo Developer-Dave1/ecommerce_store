@@ -6,15 +6,16 @@
     "lib": "lib"
   },
   "scripts": {
-  "start": "nodemon",
-  "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
-}
-,
+    "start": "nodemon",
+    "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
+  },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
     "browser-sync": "^3.0.4",
+    "connect-pg-simple": "^10.0.0",
+    "express-session": "^1.18.1",
     "pg": "^8.16.0",
     "pug": "^3.0.3"
   },

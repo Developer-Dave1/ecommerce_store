@@ -4,6 +4,9 @@ const path = require('path');
 const Product = require('./lib/products.js');
 const Cart = require('./lib/cart.js'); 
 const { Client } = require('pg');
+const session = require('express-session');
+const pgSession = require('connect-pg-simple')(session);
+
 
 const client = new Client({ database: 'ecommerce' });
 client.connect();
@@ -13,6 +16,21 @@ app.set('views', path.join(__dirname, 'views'));
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
+app.use(session({
+  store: new pgSession({
+    pool: client,             
+    tableName: 'session'      
+  }),
+  secret: 'yourSuperSecretKey', // generate a secret at some point
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    maxAge: 1000 * 60 * 60,   
+    secure: false,           
+    httpOnly: true,
+    sameSite: 'lax'
+  }
+}));
 
 
 app.get('/', (req, res) => {
@@ -37,24 +55,47 @@ app.get('/products', async (req, res) => {
 
 app.get('/cart', async (req, res) => {
   try {
-    const user_id = 1; // or from session
-    const cartItems = await Cart.getCartContents(client, user_id);
-    const totalCartAmount = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const cart = req.session.cart || [];
 
+    if (cart.length === 0) {
+      return res.render('cart', { cartItems: [], total: '0.00' });
+    }
+
+    const enrichedCart = [];
+
+    for (const item of cart) {
+      const result = await client.query(
+        'SELECT id, product_name, price FROM products WHERE id = $1',
+        [item.product_id]
+      );
+
+      const product = result.rows[0];
+      if (product) {
+        enrichedCart.push({
+          product_id: product.id,
+          product_name: product.product_name,
+          price: parseFloat(product.price),
+          quantity: item.quantity,
+          total: parseFloat(product.price) * item.quantity
+        });
+      }
+    }
+
+    const totalCartAmount = enrichedCart.reduce((sum, item) => sum + item.total, 0);
 
     res.render('cart', {
-      cartItems,
+      cartItems: enrichedCart,
       total: totalCartAmount.toFixed(2)
     });
   } catch (error) {
-    console.error('Error loading cart:', error);
+    console.error('Error loading cart from session:', error);
     res.status(500).send('Error loading cart.');
   }
 });
 
+
 app.post('/cart/add', async (req, res) => {
   try {
-    const user_id = 1; 
     const product_id = parseInt(req.body.product_id, 10);
     const quantityToAdd = 1;
 
@@ -64,13 +105,20 @@ app.post('/cart/add', async (req, res) => {
       return res.status(400).send('Not enough stock available.');
     }
 
-    await Cart.addProductToCart(client, user_id, product_id);
+    if (!req.session.cart) {
+      req.session.cart = [];
+    }
 
-    const newAmount = currentAmount - 1;
-    await Product.changeQuantity(client, product_id, newAmount);
+    const existingItem = req.session.cart.find(item => item.product_id === product_id);
+
+    if (existingItem) {
+      existingItem.quantity += quantityToAdd;
+    } else {
+      req.session.cart.push({ product_id, quantity: quantityToAdd });
+    }
 
     res.redirect('/cart');
-
+    
   } catch (error) {
     console.error('Error adding to cart:', error.message, error.stack);
     res.status(500).render('not-found');
