@@ -176,6 +176,7 @@ exports.productsInStock = async (client) => {
     }
 
     const names = result.rows.map(product => product.product_name);
+    console.log(names);
     console.log(`Products in stock: ${names.join(', ')}`);
     return names;
   } catch (error) {
@@ -202,7 +203,7 @@ exports.getProductByID = async (client, productID) => {
 
 exports.getAllProducts = async (client) => {
   try {
-    const result = await client.query('SELECT * FROM products ORDER BY product_name ASC');
+    const result = await client.query('SELECT * FROM products');
 
     if (result.rowCount === 0) {
       console.warn(`There are no products in the store.`);
