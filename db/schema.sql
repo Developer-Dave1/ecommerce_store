@@ -4,8 +4,6 @@ CREATE TABLE users (
     password VARCHAR(50) NOT NULL
 );
 
-<<<<<<< HEAD
-=======
 CREATE TABLE cart (
   id SERIAL PRIMARY KEY,
   user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -14,7 +12,6 @@ CREATE TABLE cart (
   UNIQUE (user_id, product_id)
 );
 
->>>>>>> users
 CREATE TABLE products (
     id SERIAL PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL UNIQUE,
@@ -22,11 +19,6 @@ CREATE TABLE products (
     quantity INTEGER NOT NULL CHECK(quantity >= 0),
     in_stock BOOLEAN DEFAULT TRUE
 );
-<<<<<<< HEAD
-
-INSERT INTO products (product_name, price, quantity)
-  VALUES ('hat', 14.00, 5);
-
 
 CREATE TABLE "session" (
   "sid" varchar NOT NULL COLLATE "default",
