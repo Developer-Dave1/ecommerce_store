@@ -1,28 +1,76 @@
 const ProductModel = require('../models/productModels');
 
-exports.createProduct = async (client, product_name, price, quantity) => {
- return await ProductModel.addProduct(client, product_name, price, quantity);
-  
+exports.validNameLength = (product_name) => {
+  if (product_name.length > 50) {
+    throw new Error(`Product name is too long. Maximum 50 characters.`);
+  } else if (product_name.length < 3) {
+    throw new Error(`Product name is too short. Minimum 3 characters.`);
+  }
 };
 
+exports.createProduct = async (client, product_name, price, quantity) => {
+  exports.validNameLength(product_name);
+
+  const doesNotExist = await ProductModel.productDoesntExist(client, product_name);
+  if (!doesNotExist) {
+    throw new Error(`A product with the name "${product_name}" already exists.`);
+  }
+
+  if (price <= 0 || quantity <= 0) {
+    throw new Error(`Price and quantity values must be greater than 0.`);
+  }
+
+  return await ProductModel.addProduct(client, product_name, price, quantity);
+};
+
+
 exports.deleteProduct = async (client, productID) => {
-    return await ProductModel.deleteProduct(client, productID);
-}
+  const product = await ProductModel.getProductByID(client, productID);
+  if (!product) {
+    throw new Error(`Product with ID ${productID} does not exist.`);
+  }
+  return ProductModel.deleteProduct(client, productID);
+};
+
 
 exports.renameProduct = async (client, productID, newName) => {
-    if (!newName || newName.length < 2) {
-    throw new Error('New product name must be at least 2 characters long');
+  const doesNotExist = await ProductModel.productDoesntExist(client, newName);
+  if (!doesNotExist) {
+    throw new Error(`A product with the name "${newName}" already exists.`);
   }
-    return await ProductModel.changeProductName(client, productID, newName);
+
+  exports.validNameLength(newName);
+
+  return await ProductModel.changeProductName(client, productID, newName);
 }
 
 exports.changePrice = async (client, productID, newPrice) => {
-    return await ProductModel.changePrice(client. productID, newPrice);
-}
+  if (newPrice <= 0) {
+    throw new Error('New price must be greater than 0.');
+  }
+
+  const product = await ProductModel.getProductByID(client, productID);
+  if (!product) {
+    throw new Error(`Product with ID ${productID} does not exist.`);
+  }
+
+  return ProductModel.changePrice(client, productID, newPrice);
+};
+
 
 exports.changeQuantity = async (client, productID, newQuantity) => {
-    return await ProductModel.changeQuantity(client, productID, newQuantity);
-}
+  if (newQuantity < 0) {
+    throw new Error(`The new quantity must be equal to or greater than 0.`);
+  }
+
+  const product = await ProductModel.getProductByID(client, productID);
+  if (!product) {
+    throw new Error(`Product with ID ${productID} does not exist.`);
+  }
+
+  return ProductModel.changeQuantity(client, productID, newQuantity);
+};
+
 
 exports.amountInStock = async (client, productID) => {
     return await ProductModel.amountInStock(client, productID)
@@ -32,5 +80,28 @@ exports.getProductName = async (client, productID) => {
     return await ProductModel.getProductName(client, productID);
 }
 
+
+
+
+
+
+
 // need to add more business logic to these methods. use renameProduct as a starting
-// places
+// place. Also add validation
+
+/*
+
+check if product exists
+
+Check product name length.
+
+Check price is greater than 0.
+
+Check quantity is non-negative.
+
+Verify product exists before updating or deleting.
+
+Check if product is in stock before changing something.
+
+
+*/

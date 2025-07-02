@@ -216,3 +216,21 @@ exports.getAllProducts = async (client) => {
     throw error;
   }
 };
+
+exports.productDoesntExist = async (client, product_name) => {
+  try {
+    const databaseQuery = await client.query('SELECT id FROM products WHERE product_name = $1', [product_name]);
+    
+    if (databaseQuery.rowCount === 0) {
+      return true;
+    } else {
+      console.warn(`There is already a product with the name ${product_name}`);
+      return false;
+    }
+
+  } catch (error) {
+    console.error(`There was an error checking if ${product_name} exists in the system.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+};

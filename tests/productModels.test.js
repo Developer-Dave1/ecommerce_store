@@ -111,4 +111,13 @@ describe('Product Models', () => {
     expect(allProducts[0].product_name).toContain('Test Shirt');
     expect(allProducts[1].quantity).toEqual(8);
   });
+
+  test('check if product already exists', async () => {
+  const newProduct = await ProductModels.addProduct(client, 'Test Shirt', 19.99, 10);
+  const exists = await ProductModels.productDoesntExist(client, 'Test Shirt');
+  expect(exists).toBe(false);
+  const doesNotExist = await ProductModels.productDoesntExist(client, 'Nonexistent Product');
+  expect(doesNotExist).toBe(true);
+  });
+
 });
