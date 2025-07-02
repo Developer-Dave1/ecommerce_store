@@ -79,29 +79,3 @@ exports.amountInStock = async (client, productID) => {
 exports.getProductName = async (client, productID) => {
     return await ProductModel.getProductName(client, productID);
 }
-
-
-
-
-
-
-
-// need to add more business logic to these methods. use renameProduct as a starting
-// place. Also add validation
-
-/*
-
-check if product exists
-
-Check product name length.
-
-Check price is greater than 0.
-
-Check quantity is non-negative.
-
-Verify product exists before updating or deleting.
-
-Check if product is in stock before changing something.
-
-
-*/
