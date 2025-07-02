@@ -6,6 +6,9 @@ const Cart = require('./lib/cart.js');
 const { Client } = require('pg');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
+const productRoutes = require('./routes/productsRoutes');
+
+
 
 
 const client = new Client({ database: 'ecommerce' });
@@ -31,6 +34,7 @@ app.use(session({
     sameSite: 'lax'
   }
 }));
+app.use('/products', productRoutes);
 
 
 app.get('/', (req, res) => {
@@ -42,16 +46,8 @@ app.get('/', (req, res) => {
   }
 });
 
-app.get('/products', async (req, res) => {
-  try {
-    const products = await Product.getAllProducts(client);
-    console.log('Products fetched:', products);
-    res.render('products', { products });
-  } catch (error) {
-    console.error('Error fetching products:', error);
-    res.status(500).send('Error loading products');
-  }
-});
+
+
 
 app.get('/cart', async (req, res) => {
   try {

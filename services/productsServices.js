@@ -79,3 +79,7 @@ exports.amountInStock = async (client, productID) => {
 exports.getProductName = async (client, productID) => {
     return await ProductModel.getProductName(client, productID);
 }
+
+exports.getAllProducts = async (client) => {
+    return await ProductModel.getAllProducts(client);
+}
