@@ -41,6 +41,7 @@ exports.allCartItems = async (client, user_id) => {
       FROM cart
       JOIN products ON cart.product_id = products.id
       WHERE cart.user_id = $1
+      ORDER BY products.product_name ASC;
     `;
     const queryParameters = [user_id];
     const result = await client.query(queryString, queryParameters);

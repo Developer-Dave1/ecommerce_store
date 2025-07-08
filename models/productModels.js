@@ -203,7 +203,7 @@ exports.getProductByID = async (client, productID) => {
 
 exports.getAllProducts = async (client) => {
   try {
-    const result = await client.query('SELECT * FROM products');
+    const result = await client.query('SELECT * FROM products ORDER BY product_name ASC');
 
     if (result.rowCount === 0) {
       console.warn(`There are no products in the store.`);
