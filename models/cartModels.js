@@ -1,19 +1,31 @@
-exports.addToCart = async (client, user_id, product_id) => {
-    try {
-      const queryString = 'INSERT INTO cart (user_id, product_id) VALUES ($1, $2)';
-      const queryParameters = [user_id, product_id];
-      await client.query(queryString, queryParameters);
-      console.log(`Item added to cart for ${user_id}`);
-    } catch (error) {
-      console.log(`Cart error, item not added: ${error.name} - ${error.message}`);
-      throw error;
+exports.addToCart = async (client, user_id, product_id, quantityToAdd) => {
+  try {
+    const updateResult = await client.query(
+      'UPDATE cart SET quantity = quantity + $1 WHERE user_id = $2 AND product_id = $3',
+      [quantityToAdd, user_id, product_id]
+    );
+
+    if (updateResult.rowCount === 0) {
+      await client.query(
+        'INSERT INTO cart (user_id, product_id, quantity) VALUES ($1, $2, $3)',
+        [user_id, product_id, quantityToAdd]
+      );
     }
+
+    console.log(`Added ${quantityToAdd} of product ${product_id} to cart for user ${user_id}`);
+  } catch (error) {
+    console.error(`Cart error: could not add to cart.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
 };
+
 
 exports.deleteFromCart = async (client, user_id, product_id) => {
     try {
+      const shopperId = user_id || 1;
       const queryString = 'DELETE FROM cart WHERE user_id = $1 AND product_id = $2';
-      const queryParameters = [user_id, product_id];
+      const queryParameters = [shopperId, product_id];
       await client.query(queryString, queryParameters);
       console.log(`Item deleted from cart.`);
     } catch (error) {
@@ -33,6 +45,10 @@ exports.allCartItems = async (client, user_id) => {
     const queryParameters = [user_id];
     const result = await client.query(queryString, queryParameters);
 
+    if (result.rowCount === 0) {
+      console.log(`Cart is empty.`);
+      return null;
+    }
     const productNames = result.rows.map(product => product.product_name).join(', ');
     console.log(`The following products are in the cart: ${productNames}`);
 

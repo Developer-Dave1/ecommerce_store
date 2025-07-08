@@ -58,4 +58,29 @@ describe('Cart Services', () => {
   test('throws error when deleting non-existent product', async () => {
     await expect(CartServices.deleteFromCart(client, 1, 999)).rejects.toThrow('Product with ID 999 does not exist.');
   });
+
+  test('updates quantity in cart successfully', async () => {
+  const product = await ProductModels.addProduct(client, 'Quantity Product', 15.99, 10);
+
+  await CartServices.addToCart(client, 1, product.id);
+
+  const newQuantity = await CartServices.changeQuantity(client, 1, product.id, 3);
+
+  expect(newQuantity).toBe(3);
+
+
+  const res = await client.query(`SELECT quantity FROM cart WHERE user_id = $1 AND product_id = $2`, [1, product.id]);
+  expect(res.rows[0].quantity).toBe(3);
+});
+
+test('throws error when new quantity exceeds stock', async () => {
+  const product = await ProductModels.addProduct(client, 'Limited Product', 20.00, 2);
+
+  await CartServices.addToCart(client, 1, product.id);
+
+  await expect(CartServices.changeQuantity(client, 1, product.id, 5)).rejects.toThrow(
+    `Cannot set quantity to 5. Only 2 available in stock.`
+  );
+});
+
 });

@@ -22,7 +22,7 @@ block content
            td= item.quantity
            td
              form(action="/cart/remove", method="POST")
-               input(type="hidden", name="product_id", value=item.id)
+               input(type="hidden", name="product_id", value=item.product_id)
                button(type="submit" class="remove-button") Remove
 
             
