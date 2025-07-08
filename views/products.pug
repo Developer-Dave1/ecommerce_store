@@ -9,9 +9,9 @@ block content
     .product-grid
       each product in products
         .product-card
-          h3= product.name
-          p $#{product.price.toFixed(2)}
-          if product.inStock
+          h3= product.product_name
+          p $#{Number(product.price).toFixed(2)}
+          if product.quantity > 0
             span.in-stock In Stock (#{product.quantity} units)
           else
             span.out-of-stock Out of Stock
@@ -20,4 +20,3 @@ block content
             input(type="hidden", name="product_id", value=product.id)
             input(type="hidden", name="quantity", value=1)
             button(type="submit").add-button Add to Cart
-

@@ -44,4 +44,19 @@ describe('Cart Models', () => {
     const result = await client.query('SELECT * FROM cart WHERE user_id = $1 AND product_id = $2', [1, newProduct.id]);
     expect(result.rowCount).toBe(0);
   });
+
+   test('retrieve all items in cart', async () => {
+    const product1 = await ProductModels.addProduct(client, 'Product One', 10.99, 5);
+    const product2 = await ProductModels.addProduct(client, 'Product Two', 20.99, 3);
+
+    await CartModels.addToCart(client, 1, product1.id);
+    await CartModels.addToCart(client, 1, product2.id);
+
+    const items = await CartModels.allCartItems(client, 1);
+
+    expect(items.length).toBe(2);
+    const productNames = items.map(item => item.product_name);
+    expect(productNames).toContain('Product One');
+    expect(productNames).toContain('Product Two');
+  });
 });

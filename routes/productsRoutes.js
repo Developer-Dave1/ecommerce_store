@@ -1,10 +1,11 @@
 const express = require('express');
 const router = express.Router();
 const ProductController = require('../controllers/productsController');
-const { client } = require('../lib/db'); // or wherever your client is
+const { client } = require('../lib/db');
 
-router.get('/', (req, res) => ProductController.viewProducts(client, req, res));
+router.get('/', ProductController.viewProducts);
 
-// Add more routes here as you build them
+
+// will add some more routes as I build 'em
 
 module.exports = router;
