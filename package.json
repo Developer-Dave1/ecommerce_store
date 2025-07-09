@@ -6,13 +6,14 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "nodemon",
+    "start": "nodemon app.js",
     "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
   },
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "bcrypt": "^6.0.0",
     "browser-sync": "^3.0.4",
     "connect-pg-simple": "^10.0.0",
     "express-session": "^1.18.1",

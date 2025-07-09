@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  h1 Create An Account
+  h2 Enter a username and password
+
+  form(action="/signup", method="POST")
+    label(for="username") Username:
+    input(type="text", name="username", required)
+
+    label(for="password") Password:
+    input(type="password", name="password", required)
+
+    button(type="submit") Sign Up

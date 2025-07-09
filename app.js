@@ -7,6 +7,7 @@ const { Client } = require('pg');
 
 const productRoutes = require('./routes/productsRoutes');
 const cartRoutes = require('./routes/cartRoutes');
+const userRoutes = require('./routes/userRoutes');
 
 const client = new Client({ database: 'ecommerce' });
 client.connect()
@@ -39,9 +40,16 @@ app.use(session({
   }
 }));
 
+app.use((req, res, next) => {
+  res.locals.username = req.session.username;
+  next();
+});
+
 
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
+app.use('/', userRoutes);
+
 
 
 app.get('/', (req, res) => {

@@ -12,6 +12,11 @@ html
         a(href="/products") All Products
         |   |  
         a(href="/cart") Cart
+        |   |  
+        if typeof username !== 'undefined'
+          a(href="/logout") Logout
+        else
+          a(href="/login") Login
 
     main
       block content
