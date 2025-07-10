@@ -1,6 +1,7 @@
 extends layout.pug
 
 block content
+
   h2 All Essential Products
 
   if !products || products.length === 0
@@ -27,6 +28,3 @@ block content
             else
               p.out-of-stock We're working on getting more inventory.
               button(type="submit", disabled, class="add-button disabled-button") Out of Stock
-
-
-

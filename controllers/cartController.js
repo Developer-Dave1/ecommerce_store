@@ -5,7 +5,10 @@ exports.allCartItems = async (req, res) => {
   const user_id = req.session.user_id || 1;
   try {
     const items = await CartServices.allCartItems(client, user_id);
-    res.render('cart', { items });
+    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+    res.render('cart', { items, total: total.toFixed(2)});
+
   } catch (error) {
     console.error(`Error in controller while fetching cart: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to load all items in cart.');
@@ -19,8 +22,10 @@ exports.addToCart = async (req, res) => {
 
   try {
     await CartServices.addToCart(client, user_id, product_id, quantityToAdd);
+    req.flash('success', 'Product added to cart.');
     res.redirect('/cart'); 
   } catch (error) {
+    req.flash('error', 'error: product not added to cart.')
     console.error(`Error adding item to cart: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to add item to cart.');
   }

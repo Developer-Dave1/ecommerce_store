@@ -77,7 +77,7 @@ exports.logout = (req, res) => {
         console.error(`Error destroying session: ${err}`);
         return res.status(500).send('Could not log out.');
       }
-      res.redirect('/'); // Redirect to home or login page after logout
+      res.redirect('/'); 
     });
   } catch (error) {
     console.error(`Logout error: ${error.name} - ${error.message}`);

@@ -1,13 +1,14 @@
 const express = require('express');
 const app = express();
 const path = require('path');
+const flash = require('express-flash');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Client } = require('pg');
 
-const productRoutes = require('./routes/productsRoutes');
 const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
+const productRoutes = require('./routes/productsRoutes');
 
 const client = new Client({ database: 'ecommerce' });
 client.connect()
@@ -25,12 +26,13 @@ app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
+
 app.use(session({
   store: new pgSession({
     pool: client,
     tableName: 'session'
   }),
-  secret: 'yourSuperSecretKey', 
+  secret: 'secret key', 
   saveUninitialized: false,
   cookie: {
     maxAge: 1000 * 60 * 60,
@@ -39,6 +41,14 @@ app.use(session({
     sameSite: 'lax'
   }
 }));
+
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash('success');
+  res.locals.error = req.flash('error');
+  next();
+});
 
 app.use((req, res, next) => {
   res.locals.username = req.session.username;
