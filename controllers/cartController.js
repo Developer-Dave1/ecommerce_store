@@ -5,15 +5,23 @@ exports.allCartItems = async (req, res) => {
   const user_id = req.session.user_id || 1;
   try {
     const items = await CartServices.allCartItems(client, user_id);
-    const total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
-    res.render('cart', { items, total: total.toFixed(2)});
+    let total = 0;
+    if (items && items.length > 0) {
+      total = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    }
+
+    res.render('cart', {
+      items: items,
+      total: total.toFixed(2),
+    });
 
   } catch (error) {
     console.error(`Error in controller while fetching cart: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to load all items in cart.');
   }
 };
+
 
 exports.addToCart = async (req, res) => {
   const user_id = req.session.user_id || 1;
@@ -37,7 +45,12 @@ exports.removeFromCart = async (req, res) => {
 
   try {
     await CartServices.deleteFromCart(client, user_id, product_id);
-    res.redirect('/cart'); 
+    req.flash('success', 'Item removed from cart.');
+
+    const items = await CartServices.allCartItems(client, user_id);
+    const total = items ? items.reduce((sum, item) => sum + item.price * item.quantity, 0) : 0;
+
+    res.redirect('/cart');
   } catch (error) {
     console.error(`Error removing item from cart: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to remove item from cart.');

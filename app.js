@@ -15,8 +15,8 @@ client.connect()
   .then(() => {
     console.log("Database connected");
   })
-  .catch(err => {
-    console.error("Database connection error:", err.stack);
+  .catch(error => {
+    console.error(`Database connection error: ${error.name} - ${error.message}`);
   });
 
 
@@ -47,29 +47,23 @@ app.use(flash());
 app.use((req, res, next) => {
   res.locals.success = req.flash('success');
   res.locals.error = req.flash('error');
-  next();
-});
-
-app.use((req, res, next) => {
   res.locals.username = req.session.username;
   next();
 });
-
 
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/', userRoutes);
 
 
-
-app.get('/', (req, res) => {
-  try {
-    res.render('index');
-  } catch (error) {
-    console.log(`There was an error reaching the index page.`);
-    throw error;
-  }
-});
+//app.get('/', (req, res) => {
+//  try {
+//    res.render('login');
+//  } catch (error) {
+//    console.log(`There was an error reaching the index page.`);
+//    throw error;
+//  }
+//});
 
 
 app.use((req, res) => {

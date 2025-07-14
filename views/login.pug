@@ -3,6 +3,14 @@ extends layout.pug
 block content
   .hero
     h2 Please Login
+    if success && success.length 
+    each msg in success 
+      .alert.alert-success= msg 
+
+    if error && error.length 
+    each msg in error 
+      .alert.alert-danger= msg 
+      
     p Enter your username and password below.
 
     form.login-form(action="/login", method="POST")

@@ -46,10 +46,10 @@ exports.allCartItems = async (client, user_id) => {
     const queryParameters = [user_id];
     const result = await client.query(queryString, queryParameters);
 
-    if (result.rowCount === 0) {
-      console.log(`Cart is empty.`);
-      return null;
-    }
+  if (result.rowCount === 0) {
+  return [];
+}
+
     const productNames = result.rows.map(product => product.product_name).join(', ');
     console.log(`The following products are in the cart: ${productNames}`);
 

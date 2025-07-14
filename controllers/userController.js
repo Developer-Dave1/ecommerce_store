@@ -22,7 +22,8 @@ exports.login = async (req, res) => {
 
     req.session.user_id = user.id;
     req.session.username = user.username;
-    res.render('welcome', { username: user.username });
+    req.flash('success', 'You are logged in.');
+    res.redirect('/products');
   } catch (error) {
     console.error(`Login error: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to log in.');
@@ -62,7 +63,8 @@ exports.createUser = async (req, res) => {
     req.session.username = newUser.username;
 
     console.log(`Successfully created user ${username}`);
-    res.render('welcome', { username: newUser.username });
+    req.flash('success', 'You successfully created an account.');
+    res.redirect('/login');
   } catch (error) {
     console.error(`There was an error creating a new user.`);
     console.error(`${error.name} - ${error.message}`);
