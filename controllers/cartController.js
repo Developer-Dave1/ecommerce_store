@@ -29,9 +29,11 @@ exports.addToCart = async (req, res) => {
   const quantityToAdd = parseInt(req.body.quantity, 10) || 1;
 
   try {
+    const page = parseInt(req.body.page, 10) || 1;
     await CartServices.addToCart(client, user_id, product_id, quantityToAdd);
     req.flash('success', 'Product added to cart.');
-    res.redirect('/cart'); 
+    console.log(`the page is ${page}`);
+    res.redirect(`/products?page=${page}`); 
   } catch (error) {
     req.flash('error', 'error: product not added to cart.')
     console.error(`Error adding item to cart: ${error.name} - ${error.message}`);

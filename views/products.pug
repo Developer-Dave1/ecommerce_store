@@ -24,6 +24,7 @@ block content
 
           form(action="/cart/add", method="POST")
             input(type="hidden", name="product_id", value=product.id)
+            input(type="hidden", name="page", value=currentPage)
           
             if product.quantity > 0
               label(for="quantity-" + product.id) Quantity:
@@ -32,3 +33,12 @@ block content
             else
               p.out-of-stock We're working on getting more inventory.
               button(type="submit", disabled, class="add-button disabled-button") Out of Stock
+      if totalPages > 1
+    nav.pagination
+      if currentPage > 1
+        a(href=`/products?page=${currentPage - 1}`) Previous
+
+      span Page #{currentPage} of #{totalPages}
+
+      if currentPage < totalPages
+        a(href=`/products?page=${currentPage + 1}`) Next
