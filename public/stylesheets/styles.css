@@ -1,3 +1,4 @@
+/* ========= Global Styles ========= */
 body {
   font-family: Arial, sans-serif;
   background: #f9f9f9;
@@ -32,7 +33,7 @@ nav a:hover {
 }
 
 main {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 2rem auto;
   padding: 1rem;
   background: white;
@@ -47,22 +48,99 @@ footer {
   color: #999;
 }
 
+/* ========= Layout ========= */
+.container {
+  display: flex;
+}
+
+.sidebar {
+  width: 200px;
+  padding: 1rem;
+  border-right: 1px solid #ddd;
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.sidebar li {
+  margin-bottom: 0.5rem;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar a:hover {
+  text-decoration: underline;
+}
+
+/* ========= Product Grid & Cards ========= */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
   gap: 1rem;
   margin-top: 1rem;
+  flex: 1; /* allow it to fill space beside sidebar */
 }
 
 .product-card {
   background: #f0f0f0;
+  border: 1px solid #ddd;
   border-radius: 8px;
   padding: 1rem;
+  text-align: center;
   box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  transition: transform 0.2s ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+}
+
+.product-image {
+  width: 100%;
+  max-width: 250px;
+  height: auto;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
+  border-radius: 8px;
 }
 
 .product-card h3 {
   margin-top: 0;
+  font-size: 1.2rem;
+}
+
+.product-card label {
+  display: block;
+  margin-top: 0.5rem;
+  font-weight: 700;
+  color: #333;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
+  text-align: center;
+}
+
+.product-card input[type="number"] {
+  display: block;
+  margin: 0.25rem auto 0 auto;
+  width: 80px;
+  padding: 0.4rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  font-size: 1rem;
+  text-align: center;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.product-card input[type="number"]:focus {
+  border-color: #28a745;
+  box-shadow: 0 0 5px rgba(40, 167, 69, 0.4);
+  outline: none;
 }
 
 .in-stock {
@@ -75,40 +153,7 @@ footer {
   font-weight: bold;
 }
 
-.hero {
-  text-align: center;
-  padding: 2rem;
-  background: #eef2f5;
-  border-radius: 8px;
-  margin-bottom: 2rem;
-}
-
-.hero h2 {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-}
-
-.hero p {
-  font-size: 1.2rem;
-  color: #555;
-  margin-bottom: 1.5rem;
-}
-
-.button {
-  display: inline-block;
-  padding: 0.75rem 1.5rem;
-  background-color: #007bff;
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  border-radius: 4px;
-  transition: background-color 0.2s ease;
-}
-
-.button:hover {
-  background-color: #0056b3;
-}
-
+/* ========= Buttons ========= */
 .add-button {
   margin-top: 0.75rem;
   padding: 0.5rem 1rem;
@@ -125,6 +170,69 @@ footer {
   background-color: #218838;
 }
 
+.disabled-button {
+  background-color: #ccc;
+  cursor: not-allowed;
+  opacity: 0.7;
+}
+
+.button,
+a.button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #007bff;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+  margin-top: 1rem;
+}
+
+.button:hover,
+a.button:hover {
+  background-color: #0056b3;
+}
+
+.remove-button {
+  display: inline-block;
+  padding: 0.6rem 1.2rem;
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  font-weight: bold;
+  border-radius: 4px;
+  cursor: pointer;
+  text-decoration: none;
+  transition: background-color 0.2s ease;
+}
+
+.remove-button:hover {
+  background-color: #c82333;
+}
+
+/* ========= Alerts ========= */
+.alert {
+  padding: 1rem;
+  margin-bottom: 1rem;
+  border-radius: 4px;
+  font-weight: bold;
+  text-align: center;
+}
+
+.alert-success {
+  background-color: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
+
+.alert-danger {
+  background-color: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
+}
+
+/* ========= Cart Table ========= */
 .cart-table {
   width: 100%;
   border-collapse: collapse;
@@ -148,127 +256,7 @@ footer {
   margin-left: 0.5rem;
 }
 
-
-h3 {
-  margin-top: 1.5rem;
-}
-
-a.button {
-  display: inline-block;
-  margin-top: 1rem;
-  background-color: #007bff;
-  color: white;
-  padding: 0.6rem 1.2rem;
-  border-radius: 4px;
-  text-decoration: none;
-}
-
-a.button:hover {
-  background-color: #0056b3;
-}
-
-.remove-button {
-  display: inline-block;
-  padding: 0.6rem 1.2rem;
-  background-color: #dc3545; /* Bootstrap red */
-  color: white;
-  border: none;
-  font-weight: bold;
-  border-radius: 4px;
-  cursor: pointer;
-  text-decoration: none;
-  transition: background-color 0.2s ease;
-}
-
-.remove-button:hover {
-  background-color: #c82333;
-}
-
-.disabled-button {
-  background-color: #ccc;
-  cursor: not-allowed;
-  opacity: 0.7;
-}
-
-.product-image {
-  width: 100%;
-  max-width: 250px;
-  height: auto;
-  object-fit: contain;
-  display: block;
-  margin: 0 auto;
-  border-radius: 8px;
-}
-
-
-.product-card {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 16px;
-  text-align: center;
-  max-width: 300px;
-}
-
-.product-card h3 {
-  font-size: 1.2rem;
-}
-
-.product-card .add-button {
-  margin-top: 10px;
-  padding: 8px 16px;
-  font-size: 1rem;
-}
-
-
-.product-card label {
-  display: block;
-  margin-top: 0.5rem;
-  font-weight: 700; 
-  color: #333;
-  font-size: 1rem;
-  letter-spacing: 0.5px;
-  text-align: center; 
-}
-
-.product-card input[type="number"] {
-  display: block; 
-  margin: 0.25rem auto 0 auto; 
-  width: 80px;
-  padding: 0.4rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  font-size: 1rem;
-  text-align: center;
-  transition: border-color 0.2s ease, box-shadow 0.2s ease;
-}
-
-.product-card input[type="number"]:focus {
-  border-color: #28a745;
-  box-shadow: 0 0 5px rgba(40, 167, 69, 0.4);
-  outline: none;
-}
-
-.alert {
-  padding: 1rem;
-  margin-bottom: 1rem;
-  border-radius: 4px;
-  font-weight: bold;
-  text-align: center;
-}
-
-.alert-success {
-  background-color: #d4edda;
-  color: #155724;
-  border: 1px solid #c3e6cb;
-}
-
-.alert-danger {
-  background-color: #f8d7da;
-  color: #721c24;
-  border: 1px solid #f5c6cb;
-}
-
-
+/* ========= Pagination ========= */
 .page-change {
   color: rgb(2, 48, 118);
   font-weight: bold;

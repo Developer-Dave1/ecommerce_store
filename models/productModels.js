@@ -234,3 +234,20 @@ exports.productDoesntExist = async (client, product_name) => {
     throw error;
   }
 };
+
+exports.getProductByType = async (client, product_type) => {
+  try {
+    const databaseQuery = await client.query('SELECT * FROM products WHERE product_type = $1', [product_type]);
+    if (databaseQuery.rowCount === 0) {
+      console.warn(`There are no products for the product type ${product_type}`);
+      return null;
+    } 
+
+    return databaseQuery.rows;
+
+  } catch (error) {
+    console.error(`There was an error finding product type ${product_type} in the system.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+};

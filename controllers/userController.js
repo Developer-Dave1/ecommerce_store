@@ -32,7 +32,9 @@ exports.login = async (req, res) => {
 
 exports.renderLoginPage = async (req, res) => {
   try {
-    res.render('login');
+    res.render('login', {
+      success: req.flash("success")
+    });
   } catch (error) {
     console.error(`Error rendering login page: ${error.name} - ${error.message}`);
     res.status(500).send('Failed to load login page.');
@@ -63,8 +65,8 @@ exports.createUser = async (req, res) => {
     req.session.username = newUser.username;
 
     console.log(`Successfully created user ${username}`);
-    req.flash('success', 'You successfully created an account.');
-    res.redirect('/login');
+    req.flash('success', 'You successfully created an account and are now logged in.');
+    res.redirect('/allProducts');
   } catch (error) {
     console.error(`There was an error creating a new user.`);
     console.error(`${error.name} - ${error.message}`);
@@ -72,14 +74,14 @@ exports.createUser = async (req, res) => {
   }
 };
 
-exports.logout = (req, res) => {
+exports.renderLogoutPage = (req, res) => {
   try {
-    req.session.destroy(err => {
-      if (err) {
-        console.error(`Error destroying session: ${err}`);
+    req.session.destroy(error => {
+      if (error) {
+        console.error(`Error destroying session: ${error}`);
         return res.status(500).send('Could not log out.');
       }
-      res.redirect('/'); 
+      res.redirect('/login'); 
     });
   } catch (error) {
     console.error(`Logout error: ${error.name} - ${error.message}`);

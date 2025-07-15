@@ -9,6 +9,7 @@ CREATE TABLE products (
     product_name VARCHAR(50) NOT NULL UNIQUE,
     price NUMERIC(10, 2) NOT NULL CHECK(price >= 0),
     quantity INTEGER NOT NULL CHECK(quantity >= 0),
+    product_type VARCHAR(50) NOT NULL,
     in_stock BOOLEAN DEFAULT TRUE
 );
 

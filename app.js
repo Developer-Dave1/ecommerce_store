@@ -10,7 +10,7 @@ const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
 const productRoutes = require('./routes/productsRoutes');
 
-const client = new Client({ database: 'ecommerce' });
+const client = new Client({ database: 'ecommerce_test' });
 client.connect()
   .then(() => {
     console.log("Database connected");
@@ -54,17 +54,6 @@ app.use((req, res, next) => {
 app.use('/products', productRoutes);
 app.use('/cart', cartRoutes);
 app.use('/', userRoutes);
-
-
-//app.get('/', (req, res) => {
-//  try {
-//    res.render('login');
-//  } catch (error) {
-//    console.log(`There was an error reaching the index page.`);
-//    throw error;
-//  }
-//});
-
 
 app.use((req, res) => {
   res.status(404).render('not-found');
