@@ -267,3 +267,9 @@ a.button:hover {
   color: #721c24;
   border: 1px solid #f5c6cb;
 }
+
+
+.page-change {
+  color: rgb(2, 48, 118);
+  font-weight: bold;
+}

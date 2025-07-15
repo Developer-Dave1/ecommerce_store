@@ -36,9 +36,11 @@ block content
       if totalPages > 1
     nav.pagination
       if currentPage > 1
-        a(href=`/products?page=${currentPage - 1}`) Previous
+        a(href=`/products?page=${currentPage - 1}`) 
+          span.page-change Previous
 
       span Page #{currentPage} of #{totalPages}
 
       if currentPage < totalPages
-        a(href=`/products?page=${currentPage + 1}`) Next
+        a(href=`/products?page=${currentPage + 1}`)
+          span.page-change Next
