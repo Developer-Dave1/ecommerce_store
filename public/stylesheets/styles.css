@@ -8,28 +8,36 @@ body {
 }
 
 header {
-  background: #333;
+  background: rgba(255, 255, 255, 0.877);
   color: white;
-  padding: 1rem 2rem;
+  border: 10px solid #ddd;
+  padding: 0.5rem 1rem;
   text-align: center;
 }
 
 header h1 {
-  margin: 0;
+  margin: 0.5;
 }
 
 nav {
-  margin-top: 0.5rem;
+  margin-top: 0rem;
 }
 
 nav a {
-  color: #ddd;
+  color:  #005EB8;
   margin: 0 1rem;
+  font-size: 3;
   text-decoration: none;
 }
 
 nav a:hover {
   text-decoration: underline;
+}
+
+.nav-text {
+  color: #005EB8;
+  font-size: 30px;
+  font-weight: bold;
 }
 
 main {
@@ -57,11 +65,17 @@ footer {
   width: 200px;
   padding: 1rem;
   border-right: 1px solid #ddd;
+  color: #F26322;
+  font-weight: bold;
+  font-size: 2.10rem;
 }
 
 .sidebar ul {
   list-style: none;
   padding: 0;
+  color: #005EB8;
+  font-size: 1.75rem;
+  font-weight: bold;
 }
 
 .sidebar li {
@@ -70,7 +84,7 @@ footer {
 
 .sidebar a {
   text-decoration: none;
-  color: #333;
+  color: #005EB8;
 }
 
 .sidebar a:hover {
@@ -119,7 +133,7 @@ footer {
   display: block;
   margin-top: 0.5rem;
   font-weight: 700;
-  color: #333;
+  color: #F26322;
   font-size: 1rem;
   letter-spacing: 0.5px;
   text-align: center;
@@ -258,6 +272,11 @@ a.button:hover {
 
 /* ========= Pagination ========= */
 .page-change {
-  color: rgb(2, 48, 118);
+  color:  #005EB8;
   font-weight: bold;
+}
+
+.logo {
+  height: 300px; 
+  object-fit: contain;
 }

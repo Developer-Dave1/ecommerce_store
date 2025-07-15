@@ -77,3 +77,37 @@ exports.getProductsByType = async (req, res) => {
     res.status(500).send('Error loading products');
   }
 };
+
+exports.getSingleProduct = async (req, res) => {
+  const product_id = parseInt(req.params.product_id, 10);
+
+  try {
+    const username = req.session.username;
+
+    if (!username) {
+      console.warn(`You need to login to see product details.`);
+      req.flash('error', 'You must login to see products.');
+      return res.redirect('/login');
+    }
+
+    const result = await client.query(
+      'SELECT * FROM products WHERE id = $1',
+      [product_id]
+    );
+
+    if (result.rowCount === 0) {
+      return res.status(404).send('Product not found.');
+    }
+
+    const product = result.rows[0];
+
+    res.render('singleProduct', {
+      product,
+      username
+    });
+
+  } catch (error) {
+    console.error(`Error fetching product: ${error.name} - ${error.message}`);
+    res.status(500).send('Error loading product page.');
+  }
+};

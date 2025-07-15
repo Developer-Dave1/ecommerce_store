@@ -3,19 +3,21 @@ html
   head
     title Essentials
     link(rel="stylesheet", href="/stylesheets/styles.css")
+    link(rel="icon", type="image/png", href="/images/logos/favicon.png")
   body
     header
-      h1 Essentials
+      a(href="/")
+        img.logo(src="/images/logos/essentials_banner.png", alt="Essentials")
       h3 Welcome #{username}!
       nav
-        a(href="/products") All Products
+        a.nav-text(href="/products") All Products
         |   |  
-        a(href="/cart") Cart
+        a.nav-text(href="/cart") Cart
         |   |  
         if typeof username !== 'undefined'
-          a(href="/logout") Logout
+          a.nav-text(href="/logout") Logout
         else
-          a(href="/login") Login
+          a.nav-text(href="/login") Login
 
     .container
       aside.sidebar

@@ -1,0 +1,27 @@
+extends layout.pug
+
+block content
+  h2= product.product_name
+
+  img.product-image(src=product.image_url, alt=product.product_name)
+
+  p $#{Number(product.price).toFixed(2)}
+  p In Stock: #{product.quantity} units
+  p Type: #{product.product_type}
+
+  if product.description
+    p.description= product.description
+
+  form(action="/cart/add", method="POST")
+    input(type="hidden", name="product_id", value=product.id)
+    input(type="hidden", name="page", value=1)
+
+    if product.quantity > 0
+      label(for="quantity") Quantity:
+      input(id="quantity", type="number", name="quantity", value=1, min=1, max=product.quantity, required)
+      button(type="submit").add-button Add to Cart
+    else
+      p.out-of-stock We're working on getting more inventory.
+      button(type="submit", disabled, class="add-button disabled-button") Out of Stock
+
+  a.button(href="/allProducts") ← Back to All Products
