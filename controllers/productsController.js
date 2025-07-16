@@ -100,11 +100,13 @@ exports.getSingleProduct = async (req, res) => {
     }
 
     const product = result.rows[0];
+    const reviews = await ProductModels.getProductReviews(client, product_id);
     
 
     res.render('singleProduct', {
       product,
-      username
+      username,
+      reviews
     });
 
   } catch (error) {

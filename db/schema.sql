@@ -21,4 +21,12 @@ CREATE TABLE cart (
   UNIQUE (user_id, product_id)
 );
 
+CREATE TABLE reviews (
+  id SERIAL PRIMARY KEY,
+  product_id INTEGER REFERENCES products(id),
+  user_id INTEGER REFERENCES users(id),
+  rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  comment TEXT,
+  created_at TIMESTAMP DEFAULT NOW()
+);
 

@@ -24,5 +24,16 @@ block content
     else
       p.out-of-stock We're working on getting more inventory.
       button(type="submit", disabled, class="add-button disabled-button") Out of Stock
+  
+  h3 Reviews
+    if reviews.length
+      each review in reviews
+        .review
+          p #[strong Rating:] #{review.rating} ⭐
+          if review.comment
+            p= review.comment
+          else
+            p No reviews yet for this product.
+
 
   a.button(href="/products") ← Back to All Products
