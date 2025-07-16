@@ -94,10 +94,10 @@ footer {
 /* ========= Product Grid & Cards ========= */
 .product-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  flex-wrap: wrap;
   gap: 1rem;
-  margin-top: 1rem;
-  flex: 1; /* allow it to fill space beside sidebar */
+  justify-content: flex-start;
+  padding: 1rem 0;
 }
 
 .product-card {

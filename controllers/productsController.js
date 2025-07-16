@@ -73,7 +73,7 @@ exports.getProductsByType = async (req, res) => {
     });
 
   } catch (error) {
-    console.error('Error fetching products:', error);
+    console.error('Error fetching product category page:', error);
     res.status(500).send('Error loading products');
   }
 };
@@ -94,12 +94,13 @@ exports.getSingleProduct = async (req, res) => {
       'SELECT * FROM products WHERE id = $1',
       [product_id]
     );
-
+  
     if (result.rowCount === 0) {
       return res.status(404).send('Product not found.');
     }
 
     const product = result.rows[0];
+    
 
     res.render('singleProduct', {
       product,
@@ -107,7 +108,7 @@ exports.getSingleProduct = async (req, res) => {
     });
 
   } catch (error) {
-    console.error(`Error fetching product: ${error.name} - ${error.message}`);
+    console.error(`Error fetching single product page: ${error.name} - ${error.message}`);
     res.status(500).send('Error loading product page.');
   }
 };

@@ -4,8 +4,8 @@ const ProductController = require('../controllers/productsController');
 const { client } = require('../lib/db');
 
 router.get('/', ProductController.viewProducts);
-router.get('/product/:product_id', ProductController.getSingleProduct);
-router.get('/:product_type', ProductController.getProductsByType);
+router.get('/category/:product_type', ProductController.getProductsByType);
+router.get('/item/:product_id', ProductController.getSingleProduct);
 
 
 module.exports = router;
