@@ -2,6 +2,7 @@ const { client } = require('../lib/db');
 const ProductModels = require('../models/productModels');
 const ProductServices = require('../services/productsServices');
 const UserServices = require('../services/userServices');
+const ReviewsModels = require('../models/reviewsModels.js');
 
 
 exports.viewProducts = async (req, res) => {
@@ -100,9 +101,9 @@ exports.getSingleProduct = async (req, res) => {
     }
 
     const product = result.rows[0];
-    const reviews = await ProductModels.getProductReviews(client, product_id);
+    const reviews = await ReviewsModels.getProductReviews(client, product_id);
     
-
+    console.log(`${reviews}`);
     res.render('singleProduct', {
       product,
       username,
@@ -114,3 +115,24 @@ exports.getSingleProduct = async (req, res) => {
     res.status(500).send('Error loading product page.');
   }
 };
+
+exports.postReview = async (req, res) => {
+  const user_id = req.session.user_id;
+  const username = req.session.username;
+  const product_id = parseInt(req.params.product_id, 10);
+  const rating = req.body.rating;
+  const comment = req.body.comment;
+  
+  try {
+    const result = await client.query('SELECT * FROM products WHERE id = $1', [product_id]);
+    const product = result.rows[0];
+    await ReviewsModels.postReview(client, product_id, user_id, rating, comment, username);
+    req.flash('success', 'Review added!');
+    res.redirect(`/products/item/${product_id}`);
+
+  } catch (error) {
+    console.error(`There was an error adding the review.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+}
