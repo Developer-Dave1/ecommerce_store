@@ -2,6 +2,14 @@ const CartServices = require('../services/cartServices');
 const { client } = require('../lib/db');
 
 exports.allCartItems = async (req, res) => {
+  const username = req.session.username;
+
+    if (!username) {
+      console.warn(`You need to successfully login in order to see your cart.`);
+      req.flash('error', 'You must login to see your cart.');
+      return res.redirect('/login');
+    }
+
   const user_id = req.session.user_id || 1;
   try {
     const items = await CartServices.allCartItems(client, user_id);
