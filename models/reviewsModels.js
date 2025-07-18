@@ -14,10 +14,11 @@ exports.getProductReviews = async (client, productID) => {
   }
 };
 
-exports.postReview = async (client, productID, userID, rating, comment, username) => {
+exports.postReview = async (client, productID, userID, comment, username) => {
     try {
-      const databaseQuery = await client.query('INSERT INTO reviews (product_id, user_id, rating, comment, username) VALUES ($1, $2, $3, $4, $5)'
-        , [productID, userID, rating, comment, username]);
+      const databaseQuery = await client.query('INSERT INTO reviews (product_id, user_id, comment, username) VALUES ($1, $2, $3, $4)'
+        , [productID, userID, comment, username]);
+      console.log(`comment added to database`);
       
       return true;
 

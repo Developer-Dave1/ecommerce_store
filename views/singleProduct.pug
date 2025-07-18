@@ -31,20 +31,18 @@ block content
         each review in reviews
           li
             p 💬 #{review.username} - #{review.comment}
-            p Rating: #{review.rating} ⭐
     else
       p No reviews yet for this product.
 
-    form(action=`/products/item/${product_id}/review`, method="POST")
-    input(type="hidden", name="product_id", value=product.id)
-
-    label(for="comment") Add A Review!
-    br
-    textarea(name="comment", rows="4", cols="50", placeholder="Write your review here...", required)
-
-    br
-
-    button(type="submit").add-button Submit Review
+    form(action=`/products/item/${product.id}/review`, method="POST")
+      input(type="hidden", name="product_id", value=product.id)
+      
+      label(for="comment") Add A Review!
+      br
+      textarea(name="comment", rows="4", cols="50", placeholder="Write your review here...", required)
+  
+      br
+      button(type="submit").add-button Submit Review
 
 
   a.button(href="/products") ← Back to All Products

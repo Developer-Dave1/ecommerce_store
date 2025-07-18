@@ -81,6 +81,11 @@ exports.getProductsByType = async (req, res) => {
 
 exports.getSingleProduct = async (req, res) => {
   const product_id = parseInt(req.params.product_id, 10);
+  console.log(`the product id is ${product_id}`);
+  console.log('params:', req.params);
+console.log('product_id before parse:', req.params.product_id);
+
+      
 
   try {
     const username = req.session.username;
@@ -90,12 +95,12 @@ exports.getSingleProduct = async (req, res) => {
       req.flash('error', 'You must login to see products.');
       return res.redirect('/login');
     }
-
+    
     const result = await client.query(
       'SELECT * FROM products WHERE id = $1',
       [product_id]
     );
-  
+
     if (result.rowCount === 0) {
       return res.status(404).send('Product not found.');
     }
@@ -119,14 +124,14 @@ exports.getSingleProduct = async (req, res) => {
 exports.postReview = async (req, res) => {
   const user_id = req.session.user_id;
   const username = req.session.username;
-  const product_id = parseInt(req.params.product_id, 10);
-  const rating = req.body.rating;
+  const product_id = parseInt(req.body.product_id, 10);
   const comment = req.body.comment;
   
   try {
+    console.log(`userid: ${user_id}, username:${username}, product_id: ${product_id}, comment: ${comment}`);
     const result = await client.query('SELECT * FROM products WHERE id = $1', [product_id]);
     const product = result.rows[0];
-    await ReviewsModels.postReview(client, product_id, user_id, rating, comment, username);
+    await ReviewsModels.postReview(client, product_id, user_id, comment, username);
     req.flash('success', 'Review added!');
     res.redirect(`/products/item/${product_id}`);
 
