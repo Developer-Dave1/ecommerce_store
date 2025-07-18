@@ -81,12 +81,7 @@ exports.getProductsByType = async (req, res) => {
 
 exports.getSingleProduct = async (req, res) => {
   const product_id = parseInt(req.params.product_id, 10);
-  console.log(`the product id is ${product_id}`);
-  console.log('params:', req.params);
-console.log('product_id before parse:', req.params.product_id);
-
-      
-
+  
   try {
     const username = req.session.username;
 
@@ -108,7 +103,6 @@ console.log('product_id before parse:', req.params.product_id);
     const product = result.rows[0];
     const reviews = await ReviewsModels.getProductReviews(client, product_id);
     
-    console.log(`${reviews}`);
     res.render('singleProduct', {
       product,
       username,
@@ -128,7 +122,7 @@ exports.postReview = async (req, res) => {
   const comment = req.body.comment;
   
   try {
-    console.log(`userid: ${user_id}, username:${username}, product_id: ${product_id}, comment: ${comment}`);
+    //console.log(`userid: ${user_id}, username:${username}, product_id: ${product_id}, comment: ${comment}`);
     const result = await client.query('SELECT * FROM products WHERE id = $1', [product_id]);
     const product = result.rows[0];
     await ReviewsModels.postReview(client, product_id, user_id, comment, username);
