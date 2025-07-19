@@ -3,6 +3,7 @@ const ProductModels = require('../models/productModels');
 const ProductServices = require('../services/productsServices');
 const UserServices = require('../services/userServices');
 const ReviewsModels = require('../models/reviewsModels.js');
+const { validationResult } = require('express-validator');
 
 
 exports.viewProducts = async (req, res) => {
