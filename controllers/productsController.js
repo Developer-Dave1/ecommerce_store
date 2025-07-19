@@ -123,12 +123,41 @@ exports.postReview = async (req, res) => {
   const comment = req.body.comment;
   
   try {
-    //console.log(`userid: ${user_id}, username:${username}, product_id: ${product_id}, comment: ${comment}`);
     const result = await client.query('SELECT * FROM products WHERE id = $1', [product_id]);
     const product = result.rows[0];
     await ReviewsModels.postReview(client, product_id, user_id, comment, username);
     req.flash('success', 'Review added!');
     res.redirect(`/products/item/${product_id}`);
+
+  } catch (error) {
+    console.error(`There was an error adding the review.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+}
+
+
+exports.renderManagePage = async (req, res) => {
+  try {
+    const products = await ProductServices.getAllProducts(client);
+    console.log(products);
+    res.render('manageProducts', {products});
+
+  } catch (error) {
+    console.error(`There was an error loading the manage page.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+}
+
+
+exports.deleteProduct = async (req, res) => {
+  const product_id = parseInt(req.body.product_id, 10);
+  
+  try {
+    await ProductServices.deleteProduct(client, product_id);
+    req.flash('success', 'Product deleted!');
+    res.redirect(`/products/manage`);
 
   } catch (error) {
     console.error(`There was an error adding the review.`);

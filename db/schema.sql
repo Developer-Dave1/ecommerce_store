@@ -23,8 +23,8 @@ CREATE TABLE cart (
 
 CREATE TABLE reviews (
   id SERIAL PRIMARY KEY,
-  product_id INTEGER REFERENCES products(id),
-  user_id INTEGER REFERENCES users(id),
+  product_id INTEGER REFERENCES products(id) ON DELETE CASCADE,
+  user_id INTEGER REFERENCES users(id) ON DELETE CASCADE,
   rating INTEGER NOT NULL CHECK (rating BETWEEN 1 AND 5),
   comment TEXT,
   created_at TIMESTAMP DEFAULT NOW()

@@ -34,12 +34,16 @@ block content
       p.out-of-stock We're working on getting more inventory.
       button(type="submit", disabled, class="add-button disabled-button") Out of Stock
   
-  h3 Reviews
+  h3 Reviews #{currentUsername}
     if reviews.length
       ul
         each review in reviews
           li
             p 💬 #{review.username} - #{review.comment}
+              if review.username === username
+                form(action=`/products/item/${product.id}/review/delete`, method="POST")
+                  input(type="hidden", name="product_id", value=product.id)
+                  button(type="submit", class="btn btn-danger") Delete Review
     else
       p No reviews yet for this product.
 

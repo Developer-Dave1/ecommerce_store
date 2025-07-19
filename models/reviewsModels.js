@@ -28,3 +28,19 @@ exports.postReview = async (client, productID, userID, comment, username) => {
         throw error;
     }
 }
+
+exports.deleteReview = async(client, user_id, product_id) => {
+  try {
+    const databaseQuery = await client.query('DELETE FROM reviews WHERE user_id = $1 AND product_id =$2', [user_id, product_id]);
+    
+     if (databaseQuery.rowCount === 0) {
+      console.warn(`No review found for user ${user_id} and product ${product_id}.`);
+    } else {
+      console.log(`Review for user ${user_id} and product ${product_id} has been deleted.`);
+    }
+
+  } catch (error) {
+    console.error(`There was an error deleting the review. ${error.name} -  ${error.message}`);
+    throw error;
+  }
+}
