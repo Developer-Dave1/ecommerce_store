@@ -27,9 +27,6 @@ block content
             input(type="hidden", name="page", value=currentPage)
 
             if product.quantity > 0
-              label(for="quantity-" + product.id) Quantity:
-              input(id="quantity-" + product.id, type="number", name="quantity", value=1, min=1, max=product.quantity, required)
-              button(type="submit").add-button Add to Cart
             else
               p.out-of-stock We're working on getting more inventory.
               button(type="submit", disabled, class="add-button disabled-button") Out of Stock

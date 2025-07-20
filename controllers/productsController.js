@@ -184,6 +184,8 @@ exports.inventoryChangeQuantity = async (req, res) => {
   const product_id = parseInt(req.params.product_id, 10);
   const quantity = parseInt(req.body.quantity);
   await ProductModels.changeQuantity(client, product_id, quantity);
+    const productQuery = await client.query(`SELECT * FROM products WHERE id = $1`, [product_id]);
+  const product = productQuery.rows[0];
 
   try {
     req.flash('success', 'Product quantity updated.');
