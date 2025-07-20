@@ -1,7 +1,7 @@
 extends layout.pug
 
 block content
-  h2(style="text-align: center") #[b #{productType.charAt(0).toUpperCase() + productType.slice(1)} Products]
+  h1(style="text-align: center") #[b #{productType.charAt(0).toUpperCase() + productType.slice(1)} Products]
 
   if !products || products.length === 0
     p No products available in this category.

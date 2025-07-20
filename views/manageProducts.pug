@@ -1,7 +1,7 @@
 extends layout 
 
 block content
-  h2(style="text-align: center") #[b Manage Products]
+  h1(style="text-align: center") #[b Pick a product:]
 
   if success && success.length
     each msg in success
@@ -10,29 +10,11 @@ block content
   if !products || products.length === 0
     p No products to manage.
   else
-    .product-grid
       each product in products
         .product-card
-          a(href=`/products/item/${product.id}`)
+          a(href=`/products/manage/${product.id}`)
             img.product-image(src=product.image_url, alt=product.product_name)
           h3= product.product_name
-          p $#{Number(product.price).toFixed(2)}
-          if product.quantity > 0
-            span.in-stock In Stock (#{product.quantity} units)
-          else
-            span.out-of-stock Out of Stock
-
-          form(action="/products/manage", method="POST")
-            input(type="hidden", name="product_id", value=product.id)
-            input(type="hidden", name="page", value=currentPage)
-            button.remove-button(type="submit") Remove Product
-
-            if product.quantity > 0
-              label(for="quantity-" + product.id) Quantity:
-              input(id="quantity-" + product.id, type="number", name="quantity", value=1, min=1, max=product.quantity, required)
-            else
-              p.out-of-stock We're working on getting more inventory.
-              button(type="submit", disabled, class="add-button disabled-button") Out of Stock
 
   if totalPages > 1
     nav.pagination

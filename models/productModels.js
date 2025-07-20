@@ -252,3 +252,19 @@ exports.getProductByType = async (client, product_type) => {
   }
 };
 
+exports.changeProductDescription = async (client, product_id, description) => {
+  try {
+    const databaseQuery = await client.query('UPDATE products SET description = $2 WHERE id = $1', [product_id, description]);
+    if (databaseQuery.rowCount === 0) {
+      console.warn(`There are no products with that id: ${product_id}`);
+      return null;
+    } 
+
+    return true;
+
+  } catch (error) {
+    console.error(`There was an error changing the product desription in the system.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+};

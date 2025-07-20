@@ -140,7 +140,6 @@ exports.postReview = async (req, res) => {
 exports.renderManagePage = async (req, res) => {
   try {
     const products = await ProductServices.getAllProducts(client);
-    console.log(products);
     res.render('manageProducts', {products});
 
   } catch (error) {
@@ -163,5 +162,80 @@ exports.deleteProduct = async (req, res) => {
     console.error(`There was an error adding the review.`);
     console.error(`${error.name} - ${error.message}`);
     throw error;
+  }
+}
+
+
+exports.renderManageSingleProduct = async (req, res) => {
+  try {
+    const product_id = parseInt(req.params.product_id, 10);
+    const productQuery = await client.query(`SELECT * FROM products WHERE id = $1`, [product_id]);
+    const product = productQuery.rows[0];
+    res.render('manageSingleProduct', {product});
+
+  } catch (error) {
+    console.error(`There was an error loading the manage single product page.`);
+    console.error(`${error.name} - ${error.message}`);
+    throw error;
+  }
+}
+
+exports.inventoryChangeQuantity = async (req, res) => {
+  const product_id = parseInt(req.params.product_id, 10);
+  const quantity = parseInt(req.body.quantity);
+  await ProductModels.changeQuantity(client, product_id, quantity);
+
+  try {
+    req.flash('success', 'Product quantity updated.');
+    res.render('manageSingleProduct', {
+    product,
+    });
+
+  } catch (error) {
+    console.error(`There was an error changing the product's price.`);
+    console.error(`${error.name} - ${error.message}`);
+    res.redirect('/products/manage');
+  }
+}
+
+exports.changeProductName = async (req, res) => {
+  const product_id = parseInt(req.params.product_id, 10);
+  const newName = req.body.new_name;
+  console.log(`new name is ${newName}`);
+  await ProductModels.changeProductName(client, product_id, newName);
+  const productQuery = await client.query(`SELECT * FROM products WHERE id = $1`, [product_id]);
+  const product = productQuery.rows[0];
+
+  try {
+    req.flash('success', 'Product name changed.');
+    res.render('manageSingleProduct', {
+    product,
+    });
+
+  } catch (error) {
+    console.error(`There was an error changing the product's price.`);
+    console.error(`${error.name} - ${error.message}`);
+    res.redirect('/products/manage');
+  }
+}
+
+exports.changeProductDescription = async (req, res) => {
+  const product_id = parseInt(req.params.product_id, 10);
+  const newDescription = req.body.description;
+  console.log(`new description is ${newDescription}`);
+  await ProductModels.changeProductDescription(client, product_id, newDescription);
+  const productQuery = await client.query(`SELECT * FROM products WHERE id = $1`, [product_id]);
+  const product = productQuery.rows[0];
+
+  try {
+    req.flash('success', 'Product description changed.');
+    res.render('manageSingleProduct', {
+    product,
+    });
+
+  } catch (error) {
+    console.error(`There was an error changing the product's price.`);
+    console.error(`${error.name} - ${error.message}`);
+    res.redirect('/products/manage');
   }
 }

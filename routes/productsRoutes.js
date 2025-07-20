@@ -24,5 +24,14 @@ router.post('/item/:product_id/review/delete',  ReviewsControllers.deleteUserRev
 
 router.get('/manage', ProductController.renderManagePage);
 router.post('/manage', ProductController.deleteProduct);
+router.get('/manage/:product_id', ProductController.renderManageSingleProduct);
+router.post('/manage/:product_id/changequantity', ProductController.inventoryChangeQuantity);
+router.post('/manage/:product_id/changename',
+    Validators.validateProductName,
+    ProductController.changeProductName);
+router.post('/manage/:product_id/changedescription',
+    Validators.validateProductDescription,
+    ProductController.changeProductDescription);
+
 
 module.exports = router;

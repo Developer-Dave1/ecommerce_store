@@ -30,3 +30,18 @@ exports.validateReview = [
   .notEmpty().withMessage('A review comment cannot be empty.')
   .escape()
 ];
+
+exports.validateProductName = [
+  body('new_name')
+  .trim()
+  .isLength({ min: 1, max: 100 }).withMessage('Product name must be 1-100 characters long.')
+  .escape()
+];
+
+
+exports.validateProductDescription = [
+  body('description')
+  .trim()
+  .isLength({ min: 1, max: 500 }).withMessage('Product description can be up to 500 characters only.')
+  .escape()
+];
