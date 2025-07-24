@@ -6,7 +6,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "nodemon app.js",
+    "start": "nodemon index.js",
     "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
   },
   "author": "",
@@ -17,6 +17,7 @@
     "browser-sync": "^3.0.4",
     "connect-flash": "^0.1.1",
     "connect-pg-simple": "^10.0.0",
+    "dotenv": "^17.2.0",
     "express-flash": "^0.0.2",
     "express-session": "^1.18.1",
     "express-validator": "^7.2.1",
