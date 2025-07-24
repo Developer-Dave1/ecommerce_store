@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const app = express();
 const path = require('path');
@@ -6,8 +5,11 @@ const flash = require('express-flash');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Client } = require('pg');
+const config = require("./lib/config");
 
-const PORT = process.env.PORT || 3000;
+const PORT = config.PORT;
+const HOST = config.HOST;
+
 const isProduction = process.env.NODE_ENV === 'production';
 
 
@@ -33,7 +35,7 @@ app.use(session({
     client: client,  
     tableName: 'session'
   }),
-  secret: process.env.SECRET || 'dev-secret',
+  secret: config.SECRET,
   resave: false,
   saveUninitialized: false,
   cookie: {

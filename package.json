@@ -6,6 +6,7 @@
     "lib": "lib"
   },
   "scripts": {
+    "heroku-postbuild": "npm install --production",
     "start": "node app.js",
     "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
   },
