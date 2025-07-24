@@ -5,6 +5,8 @@ const flash = require('express-flash');
 const session = require('express-session');
 const pgSession = require('connect-pg-simple')(session);
 const { Client } = require('pg');
+const PORT = process.env.PORT || 3000;
+
 
 const cartRoutes = require('./routes/cartRoutes');
 const userRoutes = require('./routes/userRoutes');
@@ -60,6 +62,4 @@ app.use((req, res) => {
 });
 
 console.log(`About to listen on port 3000.`);
-app.listen(3000, () => {
-  console.log('Server running on http://localhost:3000');
-});
+app.listen(PORT, () => console.log(`Listening on port ${PORT}`));
