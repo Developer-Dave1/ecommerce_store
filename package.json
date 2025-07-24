@@ -6,7 +6,7 @@
     "lib": "lib"
   },
   "scripts": {
-    "start": "nodemon index.js",
+    "start": "node app.js",
     "browsersync": "browser-sync start --proxy 'localhost:3000' --files 'views/**/*.pug, public/**/*.*' --no-notify --port 3000"
   },
   "author": "",

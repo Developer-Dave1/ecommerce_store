@@ -15,6 +15,7 @@ const client = new Client({
   connectionString: process.env.DATABASE_URL,
   ssl: isProduction ? { rejectUnauthorized: false } : false,
 });
+console.log('DATABASE_URL:', process.env.DATABASE_URL);
 
 client.connect()
   .then(() => console.log('Database connected'))
