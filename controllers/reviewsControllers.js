@@ -1,4 +1,4 @@
-const { client } = require('../lib/db');
+const { client } = require('./config');
 const ReviewsModels = require('../models/reviewsModels');
 const ProductServices = require('../services/productsServices');
 

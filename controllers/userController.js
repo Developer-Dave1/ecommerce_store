@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
 const UserServices = require('../services/userServices.js');
-const { client } = require('../lib/db');
+const { client } = require('./config');
 
 exports.login = async (req, res) => {
   const { username, password } = req.body;

@@ -8,16 +8,17 @@ const { Client } = require('pg');
 const config = require("./lib/config");
 
 const PORT = config.PORT;
-const HOST = config.HOST;
+const HOST =  config.HOST;
 
-const isProduction = process.env.NODE_ENV === 'production';
+const isProduction = (config.NODE_ENV === "production");
 
 
-const client = new Client({
-  connectionString: process.env.DATABASE_URL,
-  ssl: isProduction ? { rejectUnauthorized: false } : false,
-});
-console.log('DATABASE_URL:', process.env.DATABASE_URL);
+const CONNECTION = {
+  connectionString: config.DATABASE_URL,
+  ssl: isProduction ? { rejectUnauthorized: false } : false, // See note below
+};
+
+const client = new Client(CONNECTION);
 
 client.connect()
   .then(() => console.log('Database connected'))

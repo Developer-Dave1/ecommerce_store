@@ -1,5 +1,5 @@
 const CartServices = require('../services/cartServices');
-const { client } = require('../lib/db');
+const { client } = require('./config');
 
 exports.allCartItems = async (req, res) => {
   const username = req.session.username;
