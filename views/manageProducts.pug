@@ -1,0 +1,30 @@
+extends layout 
+
+block content
+  h1(style="text-align: center") #[b Pick a product:]
+
+  if success && success.length
+    each msg in success
+      .alert.alert-success= msg
+
+  if !products || products.length === 0
+    p No products to manage.
+  else
+      each product in products
+        .product-card
+          a(href=`/products/manage/${product.id}`)
+            img.product-image(src=product.image_url, alt=product.product_name)
+          h3= product.product_name
+
+  if totalPages > 1
+    nav.pagination
+      if currentPage > 1
+        a(href=`/products?page=${currentPage - 1}`) 
+          span.page-change Previous
+
+      span Page #{currentPage} of #{totalPages}
+
+      if currentPage < totalPages
+        a(href=`/products?page=${currentPage + 1}`)
+          span.page-change Next
+

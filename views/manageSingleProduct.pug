@@ -1,0 +1,65 @@
+extends layout.pug
+
+block content
+  h2(style="text-align: center") #[b #{product.product_name}]
+  if success && success.length
+    .alert.alert-success
+      each msg in success
+        p= msg
+
+  if error && error.length
+    .alert.alert-danger
+      each msg in error
+        p= msg
+
+  img.product-image(src=product.image_url, alt=product.product_name)
+
+  p #[b Price: $#{Number(product.price).toFixed(2)}]
+  if product.quantity > 0
+    span.in-stock In Stock (#{product.quantity} units)
+  else
+    span.out-of-stock Out of Stock
+  p #[b Type: #{product.product_type}]
+  p #[b Description: #{product.description}]
+
+
+  form(action=`/products/manage/${product.id}/changequantity`, method="POST")
+   button(type="submit").add-button Change Quantity
+   label(for="quantity") #[b           Quantity:     ]
+   input(id="quantity", type="number", name="quantity", value=product.quantity, min=0, max=999, required)
+
+  
+
+  form(action=`/products/manage/${product.id}/changename`, method="POST")
+    button(type="submit").add-button Change Name
+    label(for="new_name") #[b     New Name:    ]
+    input(
+      type="text",
+      id="new_name",
+      name="new_name",
+      value=product.product_name,
+      required
+  )
+
+
+  form(action=`/products/manage/${product.id}/changedescription`, method="POST")
+    button(type="submit").add-button Change Description
+    label(for="description") #[b     New Description:    ]
+    input(
+      type="text",
+      id="description",
+      name="description",
+      value=product.description,
+      required
+  )
+
+  p 
+  form(action="/products/manage", method="POST")
+    input(type="hidden", name="product_id", value=product.id)
+    input(type="hidden", name="page", value=currentPage)
+    button.remove-button(type="submit") Remove From Store
+
+
+  p
+
+  a.button(href="/products/manage") ← Manage Other Products

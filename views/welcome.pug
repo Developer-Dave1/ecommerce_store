@@ -1,0 +1,10 @@
+extends layout.pug
+
+block content
+  if success && success.length
+  each msg in success
+    .alert.alert-success= msg
+  
+  .hero
+    h2 Welcome #{username}! 
+    a.button(href="/products") Browse Products

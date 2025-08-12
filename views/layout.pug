@@ -1,0 +1,41 @@
+doctype html
+html
+  head
+    title Essentials
+    link(rel="stylesheet", href="/stylesheets/styles.css")
+    link(rel="icon", type="image/png", href="/images/logos/favicon.png")
+  body
+    header
+      a(href="/")
+        img.logo(src="/images/logos/essentials_banner.png", alt="Essentials")
+      h3 Welcome #{username}!
+      nav
+        a.nav-text(href="/products") All Products
+        |   |  
+        a.nav-text(href="/cart") Cart
+        |   |  
+        a.nav-text(href="/products/manage") Product Manager
+        |   |  
+        if typeof username !== 'undefined'
+          a.nav-text(href="/logout") Logout
+        else
+          a.nav-text(href="/login") Login
+
+    .container
+      aside.sidebar
+        h3 Categories
+        ul
+          li
+            a(href="/products/category/electronics") Electronics
+          li
+            a(href="/products/category/clothing") Clothing
+          li
+            a(href="/products/category/wellness") Wellness
+          li
+            a(href="/products/category/general") General
+
+      main
+        block content
+
+    footer
+      p &copy; #{new Date().getFullYear()} My Store

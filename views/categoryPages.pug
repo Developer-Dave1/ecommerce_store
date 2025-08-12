@@ -1,0 +1,47 @@
+extends layout.pug
+
+block content
+  h1(style="text-align: center") #[b #{productType.charAt(0).toUpperCase() + productType.slice(1)} Products]
+
+  if error && error.length
+    each msg in error
+      .alert.alert-danger= msg
+
+  if !products || products.length === 0
+    p No products available in this category.
+  else
+    .product-grid
+      each product in products
+        .product-card
+          a(href=`/products/item/${product.id}`)
+            img.product-image(src=product.image_url, alt=product.product_name)
+          h3= product.product_name
+          p $#{Number(product.price).toFixed(2)}
+          if product.quantity > 0
+            span.in-stock In Stock (#{product.quantity} units)
+          else
+            span.out-of-stock Out of Stock
+
+          form(action="/cart/add", method="POST")
+            input(type="hidden", name="product_id", value=product.id)
+            input(type="hidden", name="page", value=currentPage)
+
+            if product.quantity > 0
+              label(for="quantity-" + product.id) Quantity:
+              input(id="quantity-" + product.id, type="number", name="quantity", value=1, min=1, max=product.quantity, required)
+              button(type="submit").add-button Add to Cart
+            else
+              p.out-of-stock We're working on getting more inventory.
+              button(type="submit", disabled, class="add-button disabled-button") Out of Stock
+
+  if totalPages > 1
+    nav.pagination
+      if currentPage > 1
+        a(href=`/products/category/${productType}?page=${currentPage - 1}`) 
+          span.page-change Previous
+
+      span Page #{currentPage} of #{totalPages}
+
+      if currentPage < totalPages
+        a(href=`/products/category/${productType}?page=${currentPage + 1}`)
+          span.page-change Next

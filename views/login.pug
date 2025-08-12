@@ -1,0 +1,28 @@
+extends layout.pug
+
+block content
+  .hero
+    h2 Please Login
+    if success && success.length 
+    each msg in success 
+      .alert.alert-success= msg 
+
+    if error && error.length 
+    each msg in error 
+      .alert.alert-danger= msg 
+      
+    p Enter your username and password below.
+
+    form.login-form(action="/login", method="POST")
+      div.form-group
+        label(for="username") Username:
+        input(type="text", id="username", name="username", placeholder="Enter username", required)
+
+      div.form-group
+        label(for="password") Password:
+        input(type="password", id="password", name="password", placeholder="Enter password", required)
+
+      button(type="submit", class="button") Login
+
+      p.or-text Don't have a user account?
+      a.button(href="/signup") Sign Up Here

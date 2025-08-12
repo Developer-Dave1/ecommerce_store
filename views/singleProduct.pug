@@ -1,0 +1,62 @@
+extends layout.pug
+
+block content
+  h2(style="text-align: center") #[b #{product.product_name}]
+  if success && success.length
+    .alert.alert-success
+      each msg in success
+        p= msg
+
+  if error && error.length
+    .alert.alert-danger
+      each msg in error
+        p= msg
+
+  img.product-image(src=product.image_url, alt=product.product_name)
+
+  p #[b Price: $#{Number(product.price).toFixed(2)}]
+  if product.quantity > 0
+    span.in-stock In Stock (#{product.quantity} units)
+  else
+    span.out-of-stock Out of Stock
+  p #[b Type: #{product.product_type}]
+  p #[b Description: #{product.description}]
+
+  form(action="/cart/add", method="POST")
+    input(type="hidden", name="product_id", value=product.id)
+    input(type="hidden", name="page", value=1)
+
+    if product.quantity > 0
+      label(for="quantity") #[b Quantity:]
+      input(id="quantity", type="number", name="quantity", value=1, min=1, max=product.quantity, required)
+      button(type="submit").add-button Add to Cart
+    else
+      p.out-of-stock We're working on getting more inventory.
+      button(type="submit", disabled, class="add-button disabled-button") Out of Stock
+  
+  h3 Reviews #{currentUsername}
+    if reviews.length
+      ul
+        each review in reviews
+          li
+            p 💬 #{review.username} - #{review.comment}
+              if review.username === username
+                form(action=`/products/item/${product.id}/review/delete`, method="POST")
+                  input(type="hidden", name="product_id", value=product.id)
+                  button(type="submit", class="btn btn-danger") Delete Review
+    else
+      p No reviews yet for this product.
+
+    form(action=`/products/item/${product.id}/review`, method="POST")
+      input(type="hidden", name="product_id", value=product.id)
+      
+      label(for="comment") Add A Review!
+      br
+      textarea(name="comment", rows="4", cols="50", placeholder="Write your review here...", required)
+  
+      br
+      button(type="submit").add-button Submit Review
+
+  a.button(href="/products") ← Back to All Products
+
+  

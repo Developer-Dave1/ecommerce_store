@@ -1,0 +1,41 @@
+extends layout.pug
+
+block content
+  h2 Your Cart
+
+
+  if success && success.length
+    .alert.alert-success
+      each msg in success
+        p= msg
+
+  if error && error.length
+    .alert.alert-danger
+      each msg in error
+        p= msg
+
+  if !items || items.length === 0
+    p Your cart is empty.
+    a.button(href="/products") ← Continue Shopping
+  
+  else
+    table.cart-table
+      thead
+        tr
+          th Product
+          th Price
+          th Quantity
+          th Remove
+      tbody
+        each item in items
+          tr
+            td= item.product_name
+            td $#{item.price}
+            td= item.quantity
+            td
+              form(action="/cart/remove", method="POST")
+                input(type="hidden", name="product_id", value=item.product_id)
+                button(type="submit", class="remove-button") Remove
+  
+    h3 Total: $#{total}
+    a.button(href="/products") ← Continue Shopping

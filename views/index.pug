@@ -1,0 +1,14 @@
+extends layout.pug
+
+block content
+  .hero
+    h2 Welcome to Essentials!
+    p We sell the must-haves, not the nice-to-haves.
+
+    if typeof username !== 'undefined'
+      a.button(href="/logout") Logout
+    else
+      a.button(href="/login") Login
+
+    p
+    a.button(href="/products") Browse Products
