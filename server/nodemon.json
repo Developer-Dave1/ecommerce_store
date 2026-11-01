@@ -1,5 +1,5 @@
 {
-  "watch": ["views", "routes", "app.js"],
-  "ext": "js,pug",
+  "watch": ["routes", "controllers", "services", "models", "middleware", "validators", "lib", "app.js"],
+  "ext": "js",
   "exec": "node app.js"
 }
