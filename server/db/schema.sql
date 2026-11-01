@@ -1,3 +1,12 @@
+-- PostgreSQL session store used by connect-pg-simple.
+CREATE TABLE "session" (
+  sid VARCHAR PRIMARY KEY,
+  sess JSON NOT NULL,
+  expire TIMESTAMP(6) NOT NULL
+);
+
+CREATE INDEX "IDX_session_expire" ON "session" (expire);
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,

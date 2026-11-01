@@ -137,11 +137,10 @@ Run these commands from the repository root against a **new, empty database**:
 ```bash
 createdb ecommerce_store
 psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/db/schema.sql
-psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/node_modules/connect-pg-simple/table.sql
 psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/db/seed.sql
 ```
 
-The session-table command is required: `schema.sql` does not create that table, and the server is not configured to create it automatically. The seed adds nine sample products, including an out-of-stock item. It does not create any users. Schema and seed scripts are intended to run once on a fresh database.
+`schema.sql` creates all application tables, including the PostgreSQL session table and its expiration index. The seed adds nine sample products, including an out-of-stock item; create your account in the next step. Run the schema and seed scripts once on a fresh database.
 
 The fresh schema already includes `users.is_admin`; the migration in `server/db/migrations/` is for an existing database missing that field.
 
@@ -201,7 +200,6 @@ To prepare a fresh disposable test database, from the repository root:
 ```bash
 createdb ecommerce_test
 psql -v ON_ERROR_STOP=1 -d ecommerce_test -f server/db/schema.sql
-psql -v ON_ERROR_STOP=1 -d ecommerce_test -f server/node_modules/connect-pg-simple/table.sql
 cd server
 npx --no-install jest --runInBand
 ```
