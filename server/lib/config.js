@@ -18,7 +18,7 @@ module.exports = {
   database: {
     host: process.env.PGHOST || 'localhost',
     port: Number(process.env.PGPORT || 5432),
-    database: process.env.PGDATABASE || 'ecommerce_test',
+    database: process.env.PGDATABASE || 'ecommerce_store',
     // Without PGUSER/PGPASSWORD, pg uses the local user's connection defaults.
     user: process.env.PGUSER || undefined,
     password: process.env.PGPASSWORD || undefined,

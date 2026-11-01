@@ -2,7 +2,7 @@
 
 Essentials is a full-stack e-commerce application built with React, TypeScript, Node.js, Express, and PostgreSQL. It combines a product storefront with session-based authentication, customer reviews, and role-protected product editing.
 
-**Status:** In development. The React storefront integrates with authentication, product listing, reviews, and admin editing. Persistent cart integration and parts of the transition from a Pug application to a React client remain incomplete. Checkout and payments are not implemented.
+**Status:** In development. The React storefront integrates with authentication, product listing, reviews, and admin editing. Persistent cart integration and some product API handlers remain incomplete. Checkout and payments are not implemented.
 
 ## Features
 
@@ -23,6 +23,7 @@ The storefront cart is held in React state. Adding an item does not reserve or r
 - Password hashing with bcrypt and parameterized SQL queries.
 - PostgreSQL-backed sessions, regenerated on login and account creation.
 - Server-side authorization for admin routes.
+- JSON 404 responses for unknown backend routes.
 - Database-backed cart endpoints, not yet connected to the React cart.
 - Database constraints for unique usernames, nonnegative stock and prices, and one review per user per product.
 
@@ -78,7 +79,7 @@ server/
 | Validation | express-validator, client-side form checks |
 | Testing | Jest, PostgreSQL-backed tests, mocked controller dependencies |
 
-React renders the storefront; Express serves JSON endpoints and static product images.
+React renders the storefront; Express serves JSON endpoints and static product images. Server-side templates and flash-message middleware are no longer used.
 
 ## Local setup
 
@@ -100,7 +101,7 @@ If you already have the repository locally, run the installation commands from i
 
 ### 2. Configure the server
 
-Edit `server/.env` for your PostgreSQL connection. Use a separate development database so it is distinct from the database targeted by the existing tests:
+Edit `server/.env` for your PostgreSQL connection. The application database is named `ecommerce_store`, separate from the disposable databases targeted by the existing tests:
 
 ```dotenv
 NODE_ENV=development
@@ -108,7 +109,7 @@ PORT=3000
 HOST=localhost
 PGHOST=localhost
 PGPORT=5432
-PGDATABASE=ecommerce_dev
+PGDATABASE=ecommerce_store
 # Set these if your local PostgreSQL connection requires them:
 # PGUSER=your_postgres_role
 # PGPASSWORD=your_postgres_password
@@ -117,17 +118,27 @@ PGDATABASE=ecommerce_dev
 
 Without `PGUSER` or `PGPASSWORD`, the driver uses local connection defaults. Without `SECRET`, development uses a temporary random secret and existing sessions become invalid after a server restart. A secret is required when `NODE_ENV=production`.
 
-The example file defaults to `ecommerce_test`; change it to `ecommerce_dev` for this walkthrough. The commands below use PostgreSQL CLI connection defaults; supply `-h localhost -U your_postgres_role` if your local authentication requires them. `psql` does not automatically read `server/.env`.
+The application and example file default to `ecommerce_store`; the database tests use separate database names. The commands below use PostgreSQL CLI connection defaults; supply `-h localhost -U your_postgres_role` if your local authentication requires them. `psql` does not automatically read `server/.env`.
 
 ### 3. Create the database and load sample products
+
+**Existing installations:** if you previously used `ecommerce_test` for application data, stop the backend and other connections to that database, then rename it once:
+
+```bash
+psql -v ON_ERROR_STOP=1 -d postgres -c "ALTER DATABASE ecommerce_test RENAME TO ecommerce_store;"
+```
+
+This preserves existing tables and data. Set `PGDATABASE=ecommerce_store` in any existing `server/.env`, then restart the backend. If your database has already been renamed, skip this command. Existing installations should skip the fresh-database commands below.
+
+**Fresh installations:** create and initialize the application database as follows.
 
 Run these commands from the repository root against a **new, empty database**:
 
 ```bash
-createdb ecommerce_dev
-psql -v ON_ERROR_STOP=1 -d ecommerce_dev -f server/db/schema.sql
-psql -v ON_ERROR_STOP=1 -d ecommerce_dev -f server/node_modules/connect-pg-simple/table.sql
-psql -v ON_ERROR_STOP=1 -d ecommerce_dev -f server/db/seed.sql
+createdb ecommerce_store
+psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/db/schema.sql
+psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/node_modules/connect-pg-simple/table.sql
+psql -v ON_ERROR_STOP=1 -d ecommerce_store -f server/db/seed.sql
 ```
 
 The session-table command is required: `schema.sql` does not create that table, and the server is not configured to create it automatically. The seed adds nine sample products, including an out-of-stock item. It does not create any users. Schema and seed scripts are intended to run once on a fresh database.
@@ -156,7 +167,7 @@ Expect a `201` response for a new username. Use these credentials in the React l
 To try admin editing, promote this local demo account, then log out and log in again so the session picks up the role:
 
 ```bash
-psql -d ecommerce_dev -c "UPDATE users SET is_admin = TRUE WHERE username = 'demo';"
+psql -d ecommerce_store -c "UPDATE users SET is_admin = TRUE WHERE username = 'demo';"
 ```
 
 ### 5. Start the frontend
@@ -183,7 +194,7 @@ If you change the backend port, update the proxy targets in `client/vite.config.
 | `server/` | `npm start` | Start Express |
 | `server/` | `npx --no-install jest --runInBand` | Run the existing backend tests sequentially |
 
-Jest tests cover product, user, and cart database operations, service behavior, and selected controller behavior. Several suites connect directly to a database named **`ecommerce_test`** and truncate tables with `CASCADE`. Use only a disposable database with that name; changing `PGDATABASE` in `.env` does not redirect those hardcoded connections. Run suites sequentially because they share database tables.
+Jest tests cover product, user, and cart database operations, service behavior, and selected controller behavior. Several suites connect directly to a database named **`ecommerce_test`** and truncate tables with `CASCADE`. Three older suites target `ecommerce` and reference removed helper modules; those suites also need updating. Keep both test database names separate from the application database, **`ecommerce_store`**. Changing `PGDATABASE` in `.env` does not redirect hardcoded test connections. Run suites sequentially because they share database tables.
 
 To prepare a fresh disposable test database, from the repository root:
 
@@ -195,18 +206,6 @@ cd server
 npx --no-install jest --runInBand
 ```
 
-**Current test limitations:** some controller tests still expect Pug rendering rather than JSON responses, and product test helpers omit fields required by the current schema. The suite needs updating; a passing suite and coverage percentage have not been verified. No frontend or end-to-end test suite is configured.
+**Current test limitations:** some legacy controller tests still expect server-rendered views rather than JSON responses, and product test helpers omit fields required by the current schema. Those view assertions predate the current React storefront and need updating; a passing suite and coverage percentage have not been verified. No frontend or end-to-end test suite is configured.
 
 The client build does not run TypeScript type checking, and the current ESLint configuration targets JavaScript/JSX files rather than TypeScript/TSX files.
-
-## Known limitations and next steps
-
-- **Persistent cart integration:** connect the React cart to the existing backend endpoints. Cart state currently resets on refresh and is not explicitly cleared on logout.
-- **Authentication UI:** add registration and restore the current user's session when the client loads. Currently, a refresh returns the UI to the login screen even if the server session remains valid.
-- **Product endpoints:** finish the category and individual-product API handlers, which currently set a success status without sending a response. The React detail page uses the already-loaded product list instead. Category filtering and pagination are not exposed in the storefront.
-- **Testing and tooling:** update legacy tests for the current schema and JSON responses, isolate database tests, and configure TypeScript checking and linting.
-- **Error handling:** improve review and product-loading error feedback. Unknown backend routes return a JSON 404 response.
-- **Purchasing:** checkout, payments, order history, and order processing are not implemented.
-- **Deployment:** production hosting of the client, API routing, and session-cookie behavior need configuration and verification. `npm run build` creates a client bundle; Express does not currently serve it.
-
-This README describes the current code. The older READMEs inside `client/` and `server/` contain template or legacy instructions and may differ from this setup.
