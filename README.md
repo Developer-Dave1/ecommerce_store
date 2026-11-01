@@ -101,7 +101,7 @@ If you already have the repository locally, run the installation commands from i
 
 ### 2. Configure the server
 
-Edit `server/.env` for your PostgreSQL connection. The application database is named `ecommerce_store`, separate from the disposable databases targeted by the existing tests:
+Edit `server/.env` for your PostgreSQL connection. The application database is named `ecommerce_store`, also targeted by the existing database tests:
 
 ```dotenv
 NODE_ENV=development
@@ -118,7 +118,7 @@ PGDATABASE=ecommerce_store
 
 Without `PGUSER` or `PGPASSWORD`, the driver uses local connection defaults. Without `SECRET`, development uses a temporary random secret and existing sessions become invalid after a server restart. A secret is required when `NODE_ENV=production`.
 
-The application and example file default to `ecommerce_store`; the database tests use separate database names. The commands below use PostgreSQL CLI connection defaults; supply `-h localhost -U your_postgres_role` if your local authentication requires them. `psql` does not automatically read `server/.env`.
+The application and example file default to `ecommerce_store`; the database tests also target this name. The commands below use PostgreSQL CLI connection defaults; supply `-h localhost -U your_postgres_role` if your local authentication requires them. `psql` does not automatically read `server/.env`.
 
 ### 3. Create the database and load sample products
 
@@ -193,17 +193,14 @@ If you change the backend port, update the proxy targets in `client/vite.config.
 | `server/` | `npm start` | Start Express |
 | `server/` | `npx --no-install jest --runInBand` | Run the existing backend tests sequentially |
 
-Jest tests cover product, user, and cart database operations, service behavior, and selected controller behavior. Several suites connect directly to a database named **`ecommerce_test`** and truncate tables with `CASCADE`. Three older suites target `ecommerce` and reference removed helper modules; those suites also need updating. Keep both test database names separate from the application database, **`ecommerce_store`**. Changing `PGDATABASE` in `.env` does not redirect hardcoded test connections. Run suites sequentially because they share database tables.
+Jest tests cover product, user, and cart database operations, service behavior, and selected controller behavior. All explicit database connections in the tests target **`ecommerce_store`**. Several suites truncate tables with `CASCADE`, so running them against your application database deletes application data. Use a disposable PostgreSQL instance with a database named `ecommerce_store`, initialized using `server/db/schema.sql`, when running these tests. Changing `PGDATABASE` in `.env` does not redirect hardcoded test connections. Run suites sequentially because they share database tables.
 
-To prepare a fresh disposable test database, from the repository root:
+From `server/`, with the disposable database configured:
 
 ```bash
-createdb ecommerce_test
-psql -v ON_ERROR_STOP=1 -d ecommerce_test -f server/db/schema.sql
-cd server
 npx --no-install jest --runInBand
 ```
 
-**Current test limitations:** some legacy controller tests still expect server-rendered views rather than JSON responses, and product test helpers omit fields required by the current schema. Those view assertions predate the current React storefront and need updating; a passing suite and coverage percentage have not been verified. No frontend or end-to-end test suite is configured.
+**Current test limitations:** three older suites reference removed helper modules. Some legacy controller tests still expect server-rendered views rather than JSON responses, and product test helpers omit fields required by the current schema. Those view assertions predate the current React storefront and need updating; a passing suite and coverage percentage have not been verified. No frontend or end-to-end test suite is configured.
 
 The client build does not run TypeScript type checking, and the current ESLint configuration targets JavaScript/JSX files rather than TypeScript/TSX files.

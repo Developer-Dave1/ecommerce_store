@@ -7,7 +7,7 @@ let client;
 
 beforeAll(async () => {
   client = new Client({
-    database: 'ecommerce',
+    database: 'ecommerce_store',
   });
   await client.connect();
 });
