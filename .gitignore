@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# macOS
+.DS_Store
+
+# Build output
+dist/
+build/
+coverage/
+
+# Logs
+*.log
+
+# Local database and private files
+session-store.db
+server/lib/users.sql

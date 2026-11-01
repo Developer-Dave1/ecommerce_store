@@ -1,0 +1,80 @@
+.login-page {
+  min-height: 100vh;
+  background: #f5f7fa;
+  color: #102438;
+}
+
+.login-page__main {
+  padding: 1.5rem 1rem 4rem;
+}
+
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 440px;
+  margin-inline: auto;
+  padding: clamp(1.5rem, 5vw, 2.5rem);
+  border: 1px solid #dce4ec;
+  border-radius: 1rem;
+  background: #fff;
+  box-shadow: 0 12px 36px rgb(16 36 56 / 8%);
+}
+
+.login-form h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.75rem;
+  font-weight: 750;
+}
+
+.login-form__intro {
+  margin-bottom: 1.5rem;
+  color: #526579;
+}
+
+.login-form label {
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.login-form input {
+  width: 100%;
+  min-height: 48px;
+  margin-bottom: 1.25rem;
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #aab9c8;
+  border-radius: 0.5rem;
+  background: #fff;
+  color: #102438;
+  font: inherit;
+}
+
+.login-form input:focus-visible,
+.login-form button:focus-visible {
+  outline: 3px solid #0075bd;
+  outline-offset: 3px;
+}
+
+.login-form button {
+  min-height: 48px;
+  padding: 0.75rem 1rem;
+  border: 0;
+  border-radius: 0.5rem;
+  background: #006caf;
+  color: #fff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.login-form button:hover {
+  background: #00558a;
+}
+
+.login-form__error {
+  padding: 0.75rem;
+  border: 1px solid #efbdc3;
+  border-radius: 0.5rem;
+  background: #fff1f2;
+  color: #9b1c2c;
+}

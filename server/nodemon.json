@@ -1,0 +1,5 @@
+{
+  "watch": ["views", "routes", "app.js"],
+  "ext": "js,pug",
+  "exec": "node app.js"
+}

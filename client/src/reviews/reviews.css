@@ -1,0 +1,11 @@
+.product-reviews {
+  max-width: 760px;
+}
+
+.review-comment {
+  white-space: pre-wrap;
+}
+
+.review-comment-input {
+  resize: vertical;
+}
