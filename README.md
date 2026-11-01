@@ -87,7 +87,7 @@ React renders the storefront; Express serves JSON endpoints and static product i
 
 Use Node.js **22.12 or newer**, npm, and a running PostgreSQL installation with the `psql` and `createdb` commands available. The PostgreSQL role you use must be able to create the development database and its tables.
 
-The Node 16 engine declaration in `server/package.json` is outdated relative to the installed Vite version, which requires Node `^20.19.0 || >=22.12.0`.
+The server and Vite support Node.js `^20.19.0 || >=22.12.0`. Node.js 22.12 or newer is recommended for local development.
 
 ```bash
 git clone https://github.com/Developer-Dave1/ecommerce_store.git
